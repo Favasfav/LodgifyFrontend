@@ -2,8 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Axiosinstance from "../services/Axios";
 import MapComponent from "../partner/MapComponent";
+import { Button } from "@material-tailwind/react";
+
+import LocationSearch from "../user/LocationSearch ";
+
 
 function Home() {
+  const [maplocation,setmaplocation]=useState("")
+  const handleLocationSelect = (selectedLocation) => {
+    // Do something with the selected location data, e.g., set it in the component's state
+    console.log('Selected location in parent:', selectedLocation.place_name);
+    setmaplocation(selectedLocation.place_name)
+  }
+  
   const [properties, setProperties] = useState([]);
   const navigate = useNavigate();
   const containerStyle = {
@@ -44,7 +55,7 @@ function Home() {
   };
 
   const handleSearch = () => {
-    // Handle search logic here
+    
   };
   useEffect(() => {
     const fetchpropertyList = async () => {
@@ -222,25 +233,61 @@ function Home() {
                 Learn more
               </a>
             </div>
-            <div style={containerStyle}>
-      <form style={formStyle}>
-        
-        {/* <label htmlFor="location" className="text-gray-900 dark:text-white">Location</label>
-        <input type="text" id="location" style={inputStyle} placeholder="Location" />
-        <MapComponent></MapComponent> */}
+            {/* <div style={containerStyle}> */}
+<div className="wrapper">
+  <form on onSubmit={()=>{
+    navigate("locationproperty", {
+      state: { maplocation1: maplocation },
+    })
+    
+  }}>
+    <div className="relative bg-white px-4 sm:px-10 md:px-[76px] py-6 sm:py-9 md:py-[70px] mt-5 sm:-mt-[166px] shadow-lg rounded-xl flex flex-col gap-4 sm:gap-8">
 
-        <label htmlFor="startDate" className="text-gray-900 dark:text-white">Starting Date</label>
-        <input type="date" id="startDate" style={inputStyle} placeholder="Starting Date" />
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+      <div  id="mapContainer">
+  <LocationSearch onLocationSelect={handleLocationSelect} />
+</div>
 
-        <label htmlFor="endDate" className="text-gray-900 dark:text-white">Ending Date</label>
-        <input type="date" id="endDate" style={inputStyle} placeholder="Ending Date" />
-        
-        <button type="submit" style={buttonStyle} onClick={handleSearch}>
-          Search
-        </button>
-      </form>
-    </div>
+
+        <div className="flex-1">
+          <label for="pickUpDate" className="text-blue-500">
+           From
+          </label>
+          <div className="relative h-12 rounded-[4px]">
+            <input
+              type="date"
+              id="pickUpDate"
+              placeholder="22/12/23"
+              min={new Date().toISOString().split("T")[0]}
+              className="absolute bottom-0 left-0 text-gray-500 placeholder-gray-600 w-full border h-full rounded-[4px] border-gray-300 py-2 sm:py-[14px] pl-4 sm:pl-[22px] pr-9 sm:pr-11 focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
+        </div>
+
+        <div className="flex-1">
+          <label for="returnDate" className="text-blue-500">
+            To
+          </label>
+          <div className="relative h-12 rounded-[4px]">
+            <input
+              type="date"
+              id="returnDate"
+              placeholder="31/12/223"
+              className="absolute bottom-0 left-0 text-gray-500 placeholder-gray-600 w-full border h-full rounded-[4px] border-gray-300 py-2 sm:py-[14px] pl-4 sm:pl-[22px] pr-9 sm:pr-11 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" className="px-4 sm:px-6 py-2 sm:py-[14px] text-white bg-blue-500 hover:border-black w-full lg:w-2/3 mx-0 lg:mx-auto">
+        Find your Hotel
+      </button>
+    </div>
+  </form>
+</div>
+
+    </div>
+          {/* </div> */}
           
         </section>
         <div className="flex flex-col md:flex-row justify-center items-center">
@@ -588,6 +635,25 @@ function Home() {
        
 
       </>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
     </div>
   );
 }

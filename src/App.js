@@ -23,7 +23,7 @@ import Detailedpropertyuser from './user/Detailedpropertyuser';
 import Partnerproperties from './partner/Partnerproperties';
 import Detailedviewpartner from './partner/Detailedviewpartner'; 
 import Editproperty from './partner/Editproperty';
-
+import LocationProperty from './user/LocationProperty';
 
 function App() {
   return (
@@ -51,6 +51,7 @@ function App() {
           <Route path="/partnerproperties"  element={<Partnerproperties />} />
           <Route path="/Detailedpropertiespartner"  element={<Detailedviewpartner />} />
           <Route path="/editproperty"  element={<Editproperty />} />
+          <Route path="/locationproperty" element={<LocationProperty/>}/>
           
         </Routes>
       </div>
