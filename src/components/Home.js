@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Axiosinstance from "../services/Axios";
 import MapComponent from "../partner/MapComponent";
@@ -16,6 +16,7 @@ function Home() {
   }
   
   const [properties, setProperties] = useState([]);
+  const[searched, setSearched]=useState("")
   const navigate = useNavigate();
   const containerStyle = {
     display: 'flex',
@@ -80,7 +81,9 @@ function Home() {
 
     fetchpropertyList();
   }, []);
+const searchedproperty= useMemo(()=>{return properties.filter(property=>( property.property_name.toLowerCase().includes(searched.toLowerCase())))},[properties,searched])  
 
+console.log("searched",searchedproperty)
   return (
     <div>
       <>
@@ -204,12 +207,15 @@ function Home() {
               Here at Flowbite we focus on markets where technology, innovation,
               and capital can unlock long-term value and drive economic growth.
             </p>
-            <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-              <a
-                href="#"
-                className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+            <div className=" flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+             
+             < form onSubmit={(e)=>navigate('/searchedproperty',{state:{searchedproperty:searchedproperty ,searched:searched}})}>
+
+             <button
+                
+                className=" p-10 inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
               >
-                Get started
+                Search
                 <svg
                   className="w-3.5 h-3.5 ml-2"
                   aria-hidden="true"
@@ -225,13 +231,16 @@ function Home() {
                     d="M1 5h12m0 0L9 1m4 4L9 9"
                   />
                 </svg>
-              </a>
-              <a
-                href="#"
-                className="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400"
-              >
-                Learn more
-              </a>
+              </button>
+
+              <input
+             value={searched}   type="text" onChange={(e)=>setSearched(e.target.value)} placeholder="Search Hotel here"
+                className="p-5 inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 text-base font-medium text-center text-black rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400"
+              />
+           
+              </form>  
+             
+             
             </div>
             {/* <div style={containerStyle}> */}
 <div className="wrapper">
@@ -578,6 +587,7 @@ function Home() {
                 <p className="text-gray-600 mb-4">Description of Course 1.</p>
                 <a href="#" className="text-blue-500 hover:underline">
                   Learn More
+                  
                 </a>
               </div>
               {/* Course Card 2 */}
