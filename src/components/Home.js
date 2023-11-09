@@ -6,58 +6,65 @@ import { Button } from "@material-tailwind/react";
 
 import LocationSearch from "../user/LocationSearch ";
 
-
 function Home() {
-  const [maplocation,setmaplocation]=useState("")
+  const [maplocation, setmaplocation] = useState("");
   const handleLocationSelect = (selectedLocation) => {
     // Do something with the selected location data, e.g., set it in the component's state
-    console.log('Selected location in parent:', selectedLocation.place_name);
-    setmaplocation(selectedLocation.place_name)
-  }
-  
+    console.log("Selected location in parent:", selectedLocation.place_name);
+    setmaplocation(selectedLocation.place_name);
+  };
+  const [fromdate, setfromdate] = useState("");
+  const [todate, settodate] = useState("");
+
   const [properties, setProperties] = useState([]);
-  const[searched, setSearched]=useState("")
+  const [searched, setSearched] = useState("");
   const navigate = useNavigate();
   const containerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '13vh',
-    padding: '12px',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "13vh",
+    padding: "12px",
   };
 
   const formStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    color: 'black', // Text color for the form
-    fontFamily: 'Arial, sans-serif', // Specify your desired font family
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    color: "black", // Text color for the form
+    fontFamily: "Arial, sans-serif", // Specify your desired font family
   };
 
   const inputStyle = {
-    padding: '1rem',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    backgroundColor: '#f0f0f0',
-    marginRight: '1rem',
-    color:'#263238',
-    fontFamily: 'Arial, sans-serif', // Specify your desired font family
+    padding: "1rem",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    backgroundColor: "#f0f0f0",
+    marginRight: "1rem",
+    color: "#263238",
+    fontFamily: "Arial, sans-serif", // Specify your desired font family
   };
 
   const buttonStyle = {
-    padding: '0.5rem 1rem',
-    backgroundColor: '#0070f3',
-    color: 'white', // Text color for the button
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s',
-    fontFamily: 'Arial, sans-serif', // Specify your desired font family
+    padding: "0.5rem 1rem",
+    backgroundColor: "#0070f3",
+    color: "white", // Text color for the button
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    transition: "background-color 0.2s",
+    fontFamily: "Arial, sans-serif", // Specify your desired font family
   };
 
-  const handleSearch = () => {
-    
-  };
+  function formatDate(inputDate) {
+    const date = new Date(inputDate);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Note: Month is 0-based.
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+
+  const handleSearch = () => {};
   useEffect(() => {
     const fetchpropertyList = async () => {
       try {
@@ -77,13 +84,19 @@ function Home() {
         console.error("Error fetching data:", error);
         // setLoading(false);
       }
+      console.log("todatefromdate----------", todate, fromdate);
     };
 
     fetchpropertyList();
   }, []);
-const searchedproperty= useMemo(()=>{return properties.filter(property=>( property.property_name.toLowerCase().includes(searched.toLowerCase())))},[properties,searched])  
+  const searchedproperty = useMemo(() => {
+    return properties.filter((property) =>
+      property.property_name.toLowerCase().includes(searched.toLowerCase())
+    );
+  }, [properties, searched]);
 
-console.log("searched",searchedproperty)
+  console.log("searched", searchedproperty);
+  console.log("todatefromdate----------", todate, fromdate);
   return (
     <div>
       <>
@@ -104,200 +117,121 @@ console.log("searched",searchedproperty)
         />
         {/* script */}
         <title>Document</title>
-        {/* <nav className="sticky inset-0 z-10 block h-max w-full max-w-full rounded-none border border-white/80 bg-white bg-opacity-80 py-2 px-4 text-white shadow-md backdrop-blur-2xl backdrop-saturate-200 lg:px-8 lg:py-4">
-    <div className="flex items-center text-gray-900">
-      <a
-        href="#"
-        className="mr-4 block cursor-pointer py-1.5 font-sans text-base font-medium leading-relaxed text-inherit antialiased"
-      >
-        Material Tailwind
-      </a>
-      <ul className="ml-auto mr-8 hidden items-center gap-6 lg:flex">
-        <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-          <a className="flex items-center" href="#">
-            Pages
-          </a>
-        </li>
-        <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-          <a className="flex items-center" href="#">
-            Account
-          </a>
-        </li>
-        <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-          <a className="flex items-center" href="#">
-            Blocks
-          </a>
-        </li>
-        <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-          <a className="flex items-center" href="#">
-            Docs
-          </a>
-        </li>
-      </ul>
-      <button
-        className="middle none center hidden rounded-lg bg-gradient-to-tr from-pink-600 to-pink-400 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
-        type="button"
-        data-ripple-light="true"
-      >
-        <span>Buy Now</span>
-      </button>
-      <button
-        className="middle none relative ml-auto h-6 max-h-[40px] w-6 max-w-[40px] rounded-lg text-center font-sans text-xs font-medium uppercase text-blue-gray-500 transition-all hover:bg-transparent focus:bg-transparent active:bg-transparent disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:hidden"
-        data-collapse-target="sticky-navar"
-      >
-        <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            strokewidth={2}
-          >
-            <path
-              strokelinecap="round"
-              strokelinejoin="round"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </span>
-      </button>
-    </div>
-    <div
-      className="block h-0 w-full basis-full overflow-hidden text-blue-gray-900 transition-all duration-300 ease-in lg:hidden"
-      data-collapse="sticky-navar"
-    >
-      <ul className="mt-2 mb-4 flex flex-col gap-2 pb-2">
-        <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-          <a className="flex items-center" href="#">
-            Pages
-          </a>
-        </li>
-        <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-          <a className="flex items-center" href="#">
-            Account
-          </a>
-        </li>
-        <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-          <a className="flex items-center" href="#">
-            Blocks
-          </a>
-        </li>
-        <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-          <a className="flex items-center" href="#">
-            Docs
-          </a>
-        </li>
-        <button
-          className="mb-2 block w-full rounded-lg bg-gradient-to-tr from-pink-600 to-pink-400 py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-          type="button"
-          data-ripple-light="true"
-        >
-          <span>Buy Now</span>
-        </button>
-      </ul>
-    </div>
-  </nav> */}
+
         <section className="bg-center bg-no-repeat bg-[url('https://familyvacationist.com/wp-content/uploads/2020/12/Hard-Rock-Hotel-Riviera-Maya.jpg')] bg-gray-400 bg-blend-multiply">
           <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
             <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
               We invest in the world’s potential
             </h1>
-            
+
             <p className="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">
               Here at Flowbite we focus on markets where technology, innovation,
               and capital can unlock long-term value and drive economic growth.
             </p>
             <div className=" flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-             
-             < form onSubmit={(e)=>navigate('/searchedproperty',{state:{searchedproperty:searchedproperty ,searched:searched}})}>
-
-             <button
-                
-                className=" p-10 inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+              <form
+                onSubmit={(e) =>
+                  navigate("/searchedproperty", {
+                    state: {
+                      searchedproperty: searchedproperty,
+                      searched: searched,
+                    },
+                  })
+                }
               >
-                Search
-                <svg
-                  className="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
+                <button className=" p-10 inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+                  Search
+                  <svg
+                    className="w-3.5 h-3.5 ml-2"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 14 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M1 5h12m0 0L9 1m4 4L9 9"
+                    />
+                  </svg>
+                </button>
 
-              <input
-             value={searched}   type="text" onChange={(e)=>setSearched(e.target.value)} placeholder="Search Hotel here"
-                className="p-5 inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 text-base font-medium text-center text-black rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400"
-              />
-           
-              </form>  
-             
-             
+                <input
+                  value={searched}
+                  type="text"
+                  onChange={(e) => setSearched(e.target.value)}
+                  placeholder="Search Hotel here"
+                  className="p-5 inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 text-base font-medium text-center text-black rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400"
+                />
+              </form>
             </div>
             {/* <div style={containerStyle}> */}
-<div className="wrapper">
-  <form on onSubmit={()=>{
-    navigate("locationproperty", {
-      state: { maplocation1: maplocation },
-    })
-    
-  }}>
-    <div className="relative bg-white px-4 sm:px-10 md:px-[76px] py-6 sm:py-9 md:py-[70px] mt-5 sm:-mt-[166px] shadow-lg rounded-xl flex flex-col gap-4 sm:gap-8">
+            <div className="wrapper">
+              <form
+                on
+                onSubmit={() => {
+                  navigate("locationproperty", {
+                    state: { maplocation1: maplocation },
+                  });
+                }}
+              >
+                <div className="relative bg-white px-4 sm:px-10 md:px-[76px] py-6 sm:py-9 md:py-[70px] mt-5 sm:-mt-[166px] shadow-lg rounded-xl flex flex-col gap-4 sm:gap-8">
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+                    <div id="mapContainer">
+                      <LocationSearch onLocationSelect={handleLocationSelect} />
+                    </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
-      <div  id="mapContainer">
-  <LocationSearch onLocationSelect={handleLocationSelect} />
-</div>
+                    <div className="flex-1">
+                      <label for="pickUpDate" className="text-blue-500">
+                        From
+                      </label>
+                      <div className="relative h-12 rounded-[4px]">
+                        <input
+                          type="date"
+                          id="pickUpDate"
+                          placeholder="22/12/23"
+                          onChange={(e) => {
+                            const formattedDate = formatDate(e.target.value);
+                            setfromdate(formattedDate);
+                          }}
+                          min={new Date().toISOString().split("T")[0]}
+                          className="absolute bottom-0 left-0 text-gray-500 placeholder-gray-600 w-full border h-full rounded-[4px] border-gray-300 py-2 sm:py-[14px] pl-4 sm:pl-[22px] pr-9 sm:pr-11 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
 
+                    <div className="flex-1">
+                      <label for="returnDate" className="text-blue-500">
+                        To
+                      </label>
+                      <div className="relative h-12 rounded-[4px]">
+                        <input
+                          type="date"
+                          id="returnDate"
+                          placeholder="31/12/223"
+                          onChange={(e) => {
+                            const formattedDate = formatDate(e.target.value);
+                            settodate(formattedDate);
+                          }}
+                          className="absolute bottom-0 left-0 text-gray-500 placeholder-gray-600 w-full border h-full rounded-[4px] border-gray-300 py-2 sm:py-[14px] pl-4 sm:pl-[22px] pr-9 sm:pr-11 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-        <div className="flex-1">
-          <label for="pickUpDate" className="text-blue-500">
-           From
-          </label>
-          <div className="relative h-12 rounded-[4px]">
-            <input
-              type="date"
-              id="pickUpDate"
-              placeholder="22/12/23"
-              min={new Date().toISOString().split("T")[0]}
-              className="absolute bottom-0 left-0 text-gray-500 placeholder-gray-600 w-full border h-full rounded-[4px] border-gray-300 py-2 sm:py-[14px] pl-4 sm:pl-[22px] pr-9 sm:pr-11 focus:ring-blue-500 focus:border-blue-500"
-            />
+                  <button
+                    type="submit"
+                    className="px-4 sm:px-6 py-2 sm:py-[14px] text-white bg-blue-500 hover:border-black w-full lg:w-2/3 mx-0 lg:mx-auto"
+                  >
+                    Find your Hotel
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-
-        <div className="flex-1">
-          <label for="returnDate" className="text-blue-500">
-            To
-          </label>
-          <div className="relative h-12 rounded-[4px]">
-            <input
-              type="date"
-              id="returnDate"
-              placeholder="31/12/223"
-              className="absolute bottom-0 left-0 text-gray-500 placeholder-gray-600 w-full border h-full rounded-[4px] border-gray-300 py-2 sm:py-[14px] pl-4 sm:pl-[22px] pr-9 sm:pr-11 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-        </div>
-      </div>
-
-      <button type="submit" className="px-4 sm:px-6 py-2 sm:py-[14px] text-white bg-blue-500 hover:border-black w-full lg:w-2/3 mx-0 lg:mx-auto">
-        Find your Hotel
-      </button>
-    </div>
-  </form>
-</div>
-
-    </div>
           {/* </div> */}
-          
         </section>
         <div className="flex flex-col md:flex-row justify-center items-center">
           {/* Flex Item 1 */}
@@ -567,6 +501,12 @@ console.log("searched",searchedproperty)
                           className="flex-1 min-w-0 select-none rounded-lg bg-blue-500 py-3.5 px-4 text-center font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                           type="button"
                           data-ripple-light="true"
+                          onClick={() => {
+                            console.log("property.id", property.id);
+                            navigate("/bookingpage", {
+                              state: { propertyId: property.id },
+                            });
+                          }}
                         >
                           Book
                         </button>
@@ -587,7 +527,6 @@ console.log("searched",searchedproperty)
                 <p className="text-gray-600 mb-4">Description of Course 1.</p>
                 <a href="#" className="text-blue-500 hover:underline">
                   Learn More
-                  
                 </a>
               </div>
               {/* Course Card 2 */}
@@ -611,7 +550,7 @@ console.log("searched",searchedproperty)
           </div>
         </section>
 
-{/*        
+        {/*        
         <div className="flex w-full">
   <div className="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
 <form>   
@@ -641,29 +580,7 @@ console.log("searched",searchedproperty)
 </div>
 </div>
         */}
-
-       
-
       </>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
     </div>
   );
 }

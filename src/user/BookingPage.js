@@ -1,8 +1,9 @@
+
+
+
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Axiosinstance from "../services/Axios";
-import AuthContext from "../context/AuthContext";
-import { useContext } from "react";
 
 import {
   Card,
@@ -48,13 +49,12 @@ const mediaQueryStyle = {
   },
 };
 
-export default function Detailedpropertyuser() {
+export default function BookingPage() {
   console.log("Location state:");
   const location = useLocation();
   console.log("Location state:-------------", location.state);
   const propertyId = location.state.propertyId;
   const [property, Setproperty] = useState([]);
-  const{user}=useContext(AuthContext)
   const navigate = useNavigate();
   console.log("property-----------", property);
   useEffect(() => {
@@ -327,15 +327,6 @@ export default function Detailedpropertyuser() {
           </div>
         </CardBody>
         <CardFooter class="pt-3">
-          {user?<Button
-              color="purple"
-               onClick={() => {navigate('/chatmessage')}}
-              size="lg"
-              fullWidth={true}
-            >
-              Chat
-            </Button>:<p></p>}
-        
         <Button
               color="purple"
               // onClick={() => aprovefunction(property.id)}
@@ -347,6 +338,11 @@ export default function Detailedpropertyuser() {
         </CardFooter>
       </div>
     </div>
+
+       
+
+
+
     <div style={evenColumnStyle}>
       <div class="w-full max-w-[26rem] shadow-lg">
         <div>
@@ -482,7 +478,13 @@ export default function Detailedpropertyuser() {
         </div>
       </div>
     </div>
-  </div>:<p>NO PROPERTIES</p>}
+    
+  </div>
+  
+  
+  
+  :<p>NO PROPERTIES</p>}
     </div>
   );
 }
+

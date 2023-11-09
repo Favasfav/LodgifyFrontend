@@ -15,7 +15,7 @@ function Header() {
     const {user,logoutUser,itspartner,partner,handlePartnerLogin} =useContext(AuthContext)
     
     const navigate = useNavigate();
-  //  console.log("user",user)
+    console.log("user",user)
    
     
   return (
