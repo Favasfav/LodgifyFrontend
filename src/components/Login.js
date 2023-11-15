@@ -28,8 +28,8 @@ function Login() {
           <form
             onSubmit={loginUser}
             className="space-y-6"
-            action="#"
-            method="POST"
+            // action="#"
+            // method="POST"
           >
             <div>
               <label

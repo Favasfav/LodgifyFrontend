@@ -451,6 +451,7 @@ const handlesortoption=(value)=>{
                         Popular Properties in {maplocation}
                       </h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
+                        
                         {properties &&
                           properties.map((property, index) => (
                             <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">

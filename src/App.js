@@ -27,6 +27,7 @@ import LocationProperty from './user/LocationProperty';
 import Searchedproperty from './user/Searchedproperty';
 import BookingPage from './user/BookingPage';
 import Chatmessage from './user/Chatmessage';
+
 function App() {
   return (
     <div className="App">
@@ -57,6 +58,7 @@ function App() {
           <Route path="/searchedproperty" element={<Searchedproperty/>}/>
           <Route path="/bookingpage" element={<BookingPage/>}/>
           <Route path="/chatmessage" element={<Chatmessage/>}/>
+          
           
         </Routes>
       </div>

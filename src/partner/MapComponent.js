@@ -4,13 +4,13 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 const MapComponent = ({ location, setLocation }) => {
-  useEffect(() => {
+    useEffect(() => {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZmF2YXNrIiwiYSI6ImNsbzRoY3k0cDAxa3gycWxhcHNzNmNpOTEifQ.0k3SEICCKB2cLxFn2xZLXQ';
 
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v12',
-      center: [-122.25948, 37.87221],
+      center: [-122.25948, 37.87221], 
       zoom: 12,
     });
 
@@ -49,7 +49,7 @@ const MapComponent = ({ location, setLocation }) => {
       geocoder.on('result', (event) => {
         const { coordinates, place_name } = event.result;
         setLocation({
-          coordinates,
+
           placeName: place_name,
         });
         map.getSource('single-point').setData(event.result.geometry);

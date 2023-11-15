@@ -126,7 +126,7 @@ function Header() {
             />
           </svg>
           <Typography variant="small" className="font-normal">
-            Edit Profile
+             My Booking
           </Typography>
         </MenuItem>
         <MenuItem className="flex items-center gap-2">

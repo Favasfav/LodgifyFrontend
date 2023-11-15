@@ -12,6 +12,7 @@ function Partnerroomsadd() {
   const {user} =useContext(AuthContext)
   console.log("user--------------------",user)
   let form = useRef(null);
+  
   const [partner,setPartner]=useState(null)
   const [location, setLocation] = useState(null);
   const [propertyType, setPropertyType] = useState("Hotel");
@@ -35,7 +36,7 @@ function Partnerroomsadd() {
   const [selectedAmenity, setSelectedAmenity] = useState("");
   const[photo,setPhoto]=useState([])
 
-
+  
   useEffect(() => {
     const fetchuserList = async () => {
       
@@ -457,7 +458,7 @@ function Partnerroomsadd() {
             </div>
           </div>
           <div className="p-60" style={{ position: "relative" }}>
-            <MapComponent location={location} setLocation={setLocation} />
+                        <MapComponent location={location} setLocation={setLocation} />
           </div>
           <div className="container mx-auto bg-white dark:bg-gray-800 mt-10 rounded pl-10 px-4">
             <div className="xl:w-full border-b border-gray-300 dark:border-gray-700 py-5">
