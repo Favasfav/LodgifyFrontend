@@ -27,6 +27,8 @@ import LocationProperty from './user/LocationProperty';
 import Searchedproperty from './user/Searchedproperty';
 import BookingPage from './user/BookingPage';
 import Chatmessage from './user/Chatmessage';
+import Mybookings from './user/Mybookings';
+import Bookinglistall from './components/Bookinglistall';
 
 function App() {
   return (
@@ -58,6 +60,8 @@ function App() {
           <Route path="/searchedproperty" element={<Searchedproperty/>}/>
           <Route path="/bookingpage" element={<BookingPage/>}/>
           <Route path="/chatmessage" element={<Chatmessage/>}/>
+          <Route path="/bookinglist" element={<Mybookings/>}/>
+          <Route path="/bookinglistall" element={<Bookinglistall/>}/>
           
           
         </Routes>

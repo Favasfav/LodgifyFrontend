@@ -1,15 +1,39 @@
+'use client';
 
+// import { Card } from 'flowbite-react';
 import React, {useEffect ,useState, useContext } from 'react'
 import AuthContext from '../context/AuthContext'
 import ProfileUpdateModal from './ProfileUpdateModel';
 import { Navigate, useNavigate } from 'react-router-dom';
 
+import {
+  Collapse,
+  Button,
+  Card,
+  Typography,
+  CardBody,
+} from "@material-tailwind/react";
 import axios from 'axios';
+import Axiosinstance from '../services/Axios';
 function Profileview() {
   const {user,setUser}=useContext(AuthContext)
   const [loading, setLoading] = useState(true);
   const [user1,setuser1]=useState('');
+  const [walletBalance, setWalletBalance] = useState(null);
   const navigate=useNavigate()
+ 
+    const [open, setOpen] = React.useState(false);
+   
+    const toggleOpen = () =>{
+      setOpen((cur) => !cur);
+      Axiosinstance.get(`api/wallet/${user.user_id}`).then(response => {
+                    setWalletBalance(response.data.balance);
+                    console.log("iiiiiiiiiiiiiiiiiiiiiiii",response.data)
+                })
+                .catch(error => {
+                    console.error('Error fetching wallet balance:', error);
+                });
+    } 
   useEffect(() => {
     const fetchuserList = async () => {
       
@@ -26,6 +50,18 @@ function Profileview() {
     console.log("useraaaaaaaaaaaaa",user)
     fetchuserList();
   }, []);
+
+  
+//   useEffect(() => {
+   
+//     Axiosinstance.get(`api/wallet${user.user_id}`)
+//         .then(response => {
+//             setWalletBalance(response.data.balance);
+//         })
+//         .catch(error => {
+//             console.error('Error fetching wallet balance:', error);
+//         });
+// }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -54,14 +90,29 @@ function Profileview() {
     }
     return "";
   };
-  
+ 
   
   return (
     <div>
     <div className="flex justify-center items-center h-screen">
-  <div className="relative flex flex-col text-gray-700 bg-grey shadow-md w-80 rounded-xl bg-clip-border"></div>
+  <div className="relative flex flex-col text-gray-700 bg-grey shadow-md w-80 rounded-xl bg-clip-border">
+  <div>
+
+    <Button onClick={toggleOpen}>Open For See The wallet </Button>
+      <Collapse open={open}>
+        <Card className="my-4 mx-auto w-8/12">
+          <CardBody>
+            <Typography>
+              WALLET MONEY:{walletBalance}
+            </Typography>
+          </CardBody>
+        </Card>
+      </Collapse>
+  </div>
+  </div>
 
   <div className="relative h-56 mx-4 -mt-6 overflow-hidden text-white shadow-lg rounded-xl bg-blue-gray-500 bg-clip-border shadow-blue-gray-500/40">
+    
   {user1.profile_photo ? (
   <div className="h-full w-full flex items-center justify-center">
     <img
@@ -107,6 +158,7 @@ function Profileview() {
     </button>
     
   </div>
+  
   
 </div>
 

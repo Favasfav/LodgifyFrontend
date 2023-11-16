@@ -106,36 +106,13 @@ function Signup() {
     });
     
 
-  //   let response = await fetch('http://127.0.0.1:8000/api/signup/', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(formData),
-  //   });
+
      let data = await response.json();
      console.log("hhhhhh",data)
      if (response.status === 200) {
       console.log("hhhhhh",data)
      }
-  //     Swal.fire({
-  //       title: 'Success',
-  //       text: 'Account created successfully!',
-  //       icon: 'success',
-  //       confirmButtonText: 'OK',
-  //     }).then(() => {
-  //       navigate('/login');
-  //     });
-  //   } else if (data.username) {
-  //     Swal.fire({
-  //       title: 'Error',
-  //       text: data.username,
-  //       icon: 'error',
-  //       confirmButtonText: 'OK',
-  //     });
-  //   } else {
-  //     alert('Something went wrong');
-  //   }
+  
   let formData1 = {
     username: formname,
     email:formemail,
