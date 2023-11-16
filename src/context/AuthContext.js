@@ -129,38 +129,7 @@ export const AuthProvider = ({ children }) => {
     setsuperuser("False");
     navigate("/");
   };
-  // let updateToken = async () => {
-  //     console.log("update token called");
-  //     let response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
-  //         method: "POST",
-  //         headers: {
-  //             "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ refresh: authToken.refresh }),
-  //     });
 
-  // let data = await response.json();
-
-  // if (response.status === 200) {
-  //     setAuthToken(data);
-  //     setUser(jwt_decode(data.access));
-  //     localStorage.setItem("authTokens", JSON.stringify(data));
-  // } else {
-  //     loginUser();
-  // }
-  // };
-
-  // useEffect(() => {
-  //     let intervalId;
-
-  //     if (authToken) {
-  //         intervalId = setInterval(() => {
-  //             updateToken();
-  //         }, 2000);
-  //     }
-
-  //     return () => clearInterval(intervalId);
-  // }, [authToken]);
 
   let contextData = {
     loginUser: loginUser,
