@@ -4,10 +4,8 @@ import Axiosinstance from "../services/Axios";
 import AuthContext from "../context/AuthContext";
 import { useContext } from "react";
 import useRazorpay from "react-razorpay";
-import type { DatePickerProps } from "antd";
 import { DatePicker, Space, InputNumber } from "antd";
 import moment from "moment";
-
 
 import {
   Card,
@@ -72,8 +70,7 @@ export default function BookingPage() {
 
   const [Razorpay] = useRazorpay();
   console.log("property-----------", property);
-  const amt=roomqty*property.single_room_price*100
-    console.log("amt",amt)
+  
   const onChange = (value: number) => {
     console.log("changed", value);
     setroomqty(value);
@@ -103,7 +100,6 @@ export default function BookingPage() {
             if (response.data) {
               console.log("Data:=====================", response.data);
               Setproperty(response.data);
-
             } else {
               console.error("Error in response:", response);
             }
@@ -116,7 +112,7 @@ export default function BookingPage() {
         // setLoading(false);
       }
     };
-   
+
     fetchUserList();
   }, []);
   const checkforRooms = async (propertyId) => {
@@ -124,7 +120,7 @@ export default function BookingPage() {
       propertyId: propertyId,
       checkindate: checkindate,
       checkoutdate: checkoutdate,
-      roomqty:roomqty
+      roomqty: roomqty,
     };
     Axiosinstance.post(
       `booking/checkroomavailblity/${propertyId}/${checkindate}/${checkoutdate}/${roomqty}`
@@ -137,7 +133,6 @@ export default function BookingPage() {
           icon: "success",
           confirmButtonText: "OK",
         });
-       
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -151,147 +146,118 @@ export default function BookingPage() {
       });
   };
 
-  // const handleFormSubmit = (event) => {
-  //   event.preventDefault();
-  //   console.log("user.user_id",user.user_id)
+ 
 
-  //   try {
-  //     Axiosinstance.post(`booking/roombooking/${propertyId}/${checkindate}/${checkoutdate}/${roomqty}/${user.user_id}`)
-  //       .then((response) => {
-  //         if (response.data) {
-  //           console.log("Data:=====================", response.data);
-  //           Setproperty(response.data);
-  //           Swal.fire({ title: 'Room Booked Successfully!',
-  //           text: 'I will close in 2 seconds.',
-  //           timer: 2000})
-  //           navigate('/')
-  //         } else {
-  //           console.error("Error in response:", response);
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("API request failed with error:", error);
-  //       });
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     // setLoading(false);
-  //   }
-
-
-   
-    
-
-  
-    
-  // };
-
-const compleate_payment=(payment_id,order_id,signature)=>{
-  Axiosinstance.post(`apirazorpay/order/compleate/${propertyId}/${checkindate}/${checkoutdate}/${roomqty}/${user.user_id}`,{
-    "amount":amt,
-    "currency":"INR",
-    "payment_id":payment_id,
-    "order_id":order_id,
-    "signature":signature
-
-  })
-  // .then(
-    
-  //   Swal.fire({
-  //     title: 'Booked Sucessfully',
-  // text: 'I will close in 5 seconds.',
-  // timer: 5000
-  //   })
-
-  // )
-  .then((response) => {
-    console.log("Data:", response.data);
-    Swal.fire({
-      title: "Success",
-      text: " Rooms Booked Sucessfully",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-    navigate("/")
-  })
-  .catch((response)=>{Swal.fire({
-    title: 'Error While Booking !',
-    text: 'I will close in 2 seconds.',
-    timer: 2000
-  })})
-    
-  
-
-  
-}
-
-
-
-  const razorpayPayment=()=>{
-    
-  
-   
-    Axiosinstance.post(`apirazorpay/order/create/${propertyId}/${checkindate}/${checkoutdate}/${roomqty}/${user.user_id}`,{
-      "amount":amt,
-      "currency":"INR",
-     
-
-    }).then(
-      function(response){
-       
-       console.log(response)
-       const order_id=response.data.data.id
-       
-       const options = {
-        key: "rzp_test_GlidMFhzhQAugp", // Enter the Key ID generated from the Dashboard
-        amount: amt, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+  const compleate_payment = (payment_id, order_id, signature) => {
+    Axiosinstance.post(
+      `apirazorpay/order/compleate/${propertyId}/${checkindate}/${checkoutdate}/${roomqty}/${user.user_id}`,
+      {
+        amount: amt,
         currency: "INR",
-        name: "Acme Corp",
-        description: "Test Transaction",
-        image: "https://example.com/your_logo",
-        order_id: order_id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
-        handler: function (response) {
-          // alert(response.razorpay_payment_id);
-          // alert(response.razorpay_order_id);
-          // alert(response.razorpay_signature);
-          compleate_payment(
-            response.razorpay_payment_id,response.razorpay_order_id,response.razorpay_signature
-          )
-        },
-        prefill: {
-          name: "Muhammed favas",
-          email: "youremail@example.com",
-          contact: "9999999999",
-        },
-        notes: {
-          address: "Razorpay Corporate Office",
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-    
-      const rzp1 = new Razorpay(options);
-    
-      rzp1.on("payment.failed", function (response) {
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
-      });
-    
-      rzp1.open();
-    
+        payment_id: payment_id,
+        order_id: order_id,
+        signature: signature,
       }
-      
     )
-    .catch(function(response){
-      console.log("error")
-    })
+      // .then(
 
-}
+      //   Swal.fire({
+      //     title: 'Booked Sucessfully',
+      // text: 'I will close in 5 seconds.',
+      // timer: 5000
+      //   })
+
+      // )
+      .then((response) => {
+        console.log("Data:", response.data);
+        Swal.fire({
+          title: "Success",
+          text: " Rooms Booked Sucessfully",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        navigate("/");
+      })
+      .catch((response) => {
+        Swal.fire({
+          title: "Error While Booking !",
+          text: "I will close in 2 seconds.",
+          timer: 2000,
+        });
+      });
+  };
+
+  const no_of_days=()=>{
+    const checkindates=checkindate.split('-')
+    const checkoutdates=checkoutdate.split('-')
+    const days=checkoutdates[2]-checkindates[2]
+return days+1
+    
+  }
+  const amt = (roomqty * property.single_room_price * 100*no_of_days())*-1;
+  console.log("amt", amt);
+  const razorpayPayment = () => {
+    Axiosinstance.post(
+      `apirazorpay/order/create/${propertyId}/${checkindate}/${checkoutdate}/${roomqty}/${user.user_id}`,
+      {
+        amount: amt,
+        currency: "INR",
+      }
+    )
+      .then(function (response) {
+        console.log(response);
+        const order_id = response.data.data.id;
+
+        const options = {
+          key: "rzp_test_GlidMFhzhQAugp", // Enter the Key ID generated from the Dashboard
+          amount: amt, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+          currency: "INR",
+          name: "Acme Corp",
+          description: "Test Transaction",
+          image: "https://example.com/your_logo",
+          order_id: order_id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
+          handler: function (response) {
+            // alert(response.razorpay_payment_id);
+            // alert(response.razorpay_order_id);
+            // alert(response.razorpay_signature);
+            compleate_payment(
+              response.razorpay_payment_id,
+              response.razorpay_order_id,
+              response.razorpay_signature
+            );
+          },
+          prefill: {
+            name: "Muhammed favas",
+            email: "youremail@example.com",
+            contact: "9999999999",
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+
+        const rzp1 = new Razorpay(options);
+
+        rzp1.on("payment.failed", function (response) {
+          alert(response.error.code);
+          alert(response.error.description);
+          alert(response.error.source);
+          alert(response.error.step);
+          alert(response.error.reason);
+          alert(response.error.metadata.order_id);
+          alert(response.error.metadata.payment_id);
+        });
+
+        rzp1.open();
+      })
+      .catch(function (response) {
+        console.log("error");
+      });
+  };
+  
   return (
     <div className="p-10  ">
       {property.is_verified ? (
@@ -739,7 +705,7 @@ const compleate_payment=(payment_id,order_id,signature)=>{
               </div>
             </div>
             <div>
-              <form >
+              <form>
                 <div className="mx-auto grid max-w-screen-lg px-6 pb-20">
                   <div className="">
                     <p className="font-serif p-10 text-xl font-bold text-blue-900">
@@ -770,9 +736,8 @@ const compleate_payment=(payment_id,order_id,signature)=>{
                         <Button
                           color="purple"
                           onClick={() => {
-                            if (checkindate && checkoutdate&&roomqty) {
+                            if (checkindate && checkoutdate && roomqty) {
                               checkforRooms(property.id);
-
                             } else
                               Swal.fire({
                                 title: "Error",
@@ -798,19 +763,20 @@ const compleate_payment=(payment_id,order_id,signature)=>{
                       </Button>
                     )}
                   </CardFooter>
-                  {roomqty? <p >total Amount:{roomqty*property.single_room_price}</p>:<p></p>}
-                            
-                
+                  {roomqty ? (
+                    <p>total Amount:{roomqty * property.single_room_price*no_of_days()}</p>
+                  ) : (
+                    <p></p>
+                  )}
                 </div>
               </form>
-              <div ></div>
+              <div></div>
               <button
-                    
-                    onClick={razorpayPayment}
-                    className="mt-8 w-56 rounded-full border-8 border-emerald-500 bg-emerald-600 px-10 py-4 text-lg font-bold text-black transition hover:translate-y-1"
-                  >
-                    Book Now
-                  </button>
+                onClick={razorpayPayment}
+                className="mt-8 w-56 rounded-full border-8 border-emerald-500 bg-emerald-600 px-10 py-4 text-lg font-bold text-black transition hover:translate-y-1"
+              >
+                Book Now
+              </button>
               <script src="https://unpkg.com/flowbite@1.5.2/dist/datepicker.js"></script>
             </div>
           </div>
@@ -820,4 +786,4 @@ const compleate_payment=(payment_id,order_id,signature)=>{
       )}
     </div>
   );
-};
+}

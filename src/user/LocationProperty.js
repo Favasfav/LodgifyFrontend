@@ -438,7 +438,7 @@ const handlesortoption=(value)=>{
                     )}
                   </Disclosure>
                 ))}
-                <Button type="submit" color="blue">Apply Filter</Button>
+                {/* <Button type="submit" color="blue">Apply Filter</Button> */}
               </form>
 
               {/* Product grid */}

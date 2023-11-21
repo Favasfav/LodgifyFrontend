@@ -389,12 +389,13 @@ export default function Detailedpropertyuser() {
                   </span>
                 </div>
               </CardBody>
-              <CardFooter class="pt-3">
+              <CardFooter class="pt-7">
                 {user ? (
                   <Button
                     color="purple"
                     onClick={() => {
-                      navigate("/chatmessage");
+                      navigate("/chat",{state
+                        :{property:property}});
                     }}
                     size="lg"
                     fullWidth={true}

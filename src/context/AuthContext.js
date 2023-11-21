@@ -9,11 +9,13 @@ const AuthContext = createContext();
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
+  const[userdetails,setUserdetails]=useState()
   const [partner, SetPartner] = useState(() =>
     localStorage.getItem("authTokens")
       ? jwt_decode(localStorage.getItem("authTokens"))
       : null
   );
+
   let navigate = useNavigate();
   let [authToken, setAuthToken] = useState(() =>
     localStorage.getItem("authTokens")
@@ -67,7 +69,7 @@ export const AuthProvider = ({ children }) => {
     console.log("respose", response.status);
 
     try {
-      if (response.status === 400) {
+      if (response.status === 400 ) {
         Swal.fire({
           title: "User Blocked",
           text: "Your account has been blocked. Please contact support for assistance.",
@@ -75,8 +77,18 @@ export const AuthProvider = ({ children }) => {
           confirmButtonText: "OK",
         });
       }
+      if (response.status === 404 ) {
+        Swal.fire({
+          title: "User Blocked or Not Defined",
+          text: "Your account has been blocked. Please contact support for assistance.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
 
       if (response.status === 200) {
+       
+        setUserdetails(response.data)
         const decodedToken = jwt_decode(data.access);
         console.log(decodedToken, "----------------------->token");
         setIsSuperuser(decodedToken.is_superuser);
@@ -87,6 +99,7 @@ export const AuthProvider = ({ children }) => {
           // The user is not a superuser
           console.log("User is not a superuser");
         }
+        console.log("======================userdetails",userdetails)
         setAuthToken(data);
         setUser(jwt_decode(data.access));
 
@@ -120,6 +133,7 @@ export const AuthProvider = ({ children }) => {
         confirmButtonText: "OK",
       });
     }
+   
   };
   let logoutUser = () => {
     setAuthToken(null);
@@ -141,6 +155,7 @@ export const AuthProvider = ({ children }) => {
     superuser: superuser,
     setsuperuser: setsuperuser,
     setUser:setUser,
+    userdetails:userdetails,
   };
 
   return (

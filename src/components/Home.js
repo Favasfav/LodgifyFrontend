@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Axiosinstance from "../services/Axios";
 import MapComponent from "../partner/MapComponent";
 import { Button } from "@material-tailwind/react";
 
 import LocationSearch from "../user/LocationSearch ";
+import AuthContext from "../context/AuthContext";
 
 function Home() {
+  const {userdetails}=useContext(AuthContext)
   const [maplocation, setmaplocation] = useState("");
   const handleLocationSelect = (selectedLocation) => {
     // Do something with the selected location data, e.g., set it in the component's state
@@ -19,6 +21,7 @@ function Home() {
   const [properties, setProperties] = useState([]);
   const [searched, setSearched] = useState("");
   const navigate = useNavigate();
+
   const containerStyle = {
     display: "flex",
     justifyContent: "center",
@@ -97,6 +100,7 @@ function Home() {
 
   console.log("searched", searchedproperty);
   console.log("todatefromdate----------", todate, fromdate);
+  console.log("setUserdetails",userdetails)
   return (
     <div>
       <>

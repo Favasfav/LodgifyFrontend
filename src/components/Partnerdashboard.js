@@ -194,11 +194,11 @@ export function PartnerDashboard() {
               </ListItemPrefix>
               Profile
             </ListItem>
-            <ListItem>
+            <ListItem onClick={()=>{navigate('/chatpartner')}}>
               <ListItemPrefix>
                 <Cog6ToothIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Settings
+              </ListItemPrefix >
+              My Chats
             </ListItem>
             <ListItem onClick={logoutUser}>
               <ListItemPrefix>
