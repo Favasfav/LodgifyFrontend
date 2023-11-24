@@ -333,7 +333,7 @@ export default function Detailedviewpartner() {
         <CardFooter class="pt-3">
         <Button
               color="purple"
-              // onClick={() => aprovefunction(property.id)}
+               onClick={() => navigate('blockpropertypartner')}
               size="lg"
               fullWidth={true}
             >

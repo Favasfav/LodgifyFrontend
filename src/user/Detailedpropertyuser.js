@@ -395,7 +395,7 @@ export default function Detailedpropertyuser() {
                     color="purple"
                     onClick={() => {
                       navigate("/chat",{state
-                        :{property:property}});
+                        :{property:property.partner.user.id}});
                     }}
                     size="lg"
                     fullWidth={true}

@@ -248,13 +248,13 @@ function Partnerproperties() {
                         >
                           View Details
                         </button>
-                        <button
+                        {/* <button
                           className="flex-1 min-w-0 select-none rounded-lg bg-blue-500 py-3.5 px-4 text-center font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                           type="button"
                           data-ripple-light="true"
                         >
                           Block
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>

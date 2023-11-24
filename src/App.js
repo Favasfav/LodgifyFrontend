@@ -286,6 +286,8 @@ import AuthContext from "./context/AuthContext";
 import Chat from "./components/Chats/Chat";
 import Chatpartner from "./components/Chats/Chatpartner";
 import Chatlist from "./components/Chats/Chatlist";
+import Chatlistpartner from "./components/Chats/Chatlistpartner";
+import Propertyblock from "./partner/Propertyblock";
 function PrivateRouteuser({ element }) {
   console.log("hi");
 
@@ -304,7 +306,6 @@ function PrivateRoutepartner({ element }) {
     element
   ) : (
     <Navigate to="/login" />
-
   );
 }
 function PrivateRouteadmin({ element }) {
@@ -328,8 +329,8 @@ function App() {
       <Header />
       <div className="content-container">
         <Routes>
-          <Route path="/chat" element={<Chat/>}/>
-          <Route path="/chatpartner" element={<Chatpartner/>}/>
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chatpartner" element={<Chatpartner />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/SignupPartner" element={<SignupPartner />} />
@@ -339,15 +340,9 @@ function App() {
 
           <Route path="/Adminlogin" element={<Adminlogin />} />
           <Route path="/bookingpage" element={<BookingPage />} />
-          <Route
-            path="/profileviwe"
-            element={<Profileview  />}
-          />
+          <Route path="/profileviwe" element={<Profileview />} />
 
-          <Route
-            path="/Partnerdashboard"
-             element={<Partnerdashboard />} 
-          />
+          <Route path="/Partnerdashboard" element={<Partnerdashboard />} />
           <Route
             path="/admindashbord"
             element={<PrivateRouteadmin element={<Admindashboard />} />}
@@ -356,34 +351,28 @@ function App() {
             path="/userlist"
             element={<PrivateRouteuser element={<Userlist />} />}
           />
-          <Route
-            path="/ProfileUpdateModel"
-             element={<ProfileUpdateModel  />}
-          />
+          <Route path="/ProfileUpdateModel" element={<ProfileUpdateModel />} />
           <Route
             path="/partnerroomsadd"
-            element={<PrivateRoutepartner element={<Partnerroomsadd />} />}
+             element={<Partnerroomsadd  />}
           />
           <Route
             path="/pendingproperty"
-            element={<PrivateRouteadmin element={<Verificationrequest />} />}
+            element={<Verificationrequest  />}
           />
           <Route
             path="/propertylist"
-            element={<PrivateRouteuser element={<Allpropertylist />} />}
+            element={<Allpropertylist  />}
           />
           <Route
             path="/partnerproperties"
-            element={<PrivateRoutepartner element={<Partnerproperties />} />}
+             element={<Partnerproperties />}
           />
           <Route
             path="/Detailedpropertiespartner"
-            element={<PrivateRoutepartner element={<Detailedviewpartner />} />}
+            element={<Detailedviewpartner />}
           />
-          <Route
-            path="/editproperty"
-            element={<Editproperty />} 
-          />
+          <Route path="/editproperty" element={<Editproperty />} />
           <Route
             path="/detailedproperty"
             element={<PrivateRouteadmin element={<Detailedproperty />} />}
@@ -397,25 +386,14 @@ function App() {
             path="/searchedproperty"
             element={<PrivateRouteuser element={<Searchedproperty />} />}
           />
-          <Route
-            path="/chatmessage"
-             element={<Chatmessage />} 
-          />
-          <Route
-            path="/bookinglist"
-             element={<Mybookings  />}
-          />
-          <Route
-            path="/bookinglistall"
-             element={<Bookinglistall  />}
-          />
-            <Route
-            path="/chatlist"
-             element={<Chatlist  />}
-          />
-       
+          <Route path="/chatmessage" element={<Chatmessage />} />
+          <Route path="/bookinglist" element={<Mybookings />} />
+          <Route path="/bookinglistall" element={<Bookinglistall />} />
+          <Route path="/chatlist" element={<Chatlist />} />
+          <Route path="/getchatlistpartner" element={<Chatlistpartner />} />
+          <Route path="/getchatpartner" element={<Chatpartner />} />
+          <Route path='Detailedpropertiespartner/blockpropertypartner' element={<Propertyblock/>}/>
         </Routes>
-
       </div>
       <Footer />
     </div>

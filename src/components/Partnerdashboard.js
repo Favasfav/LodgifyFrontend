@@ -1,4 +1,4 @@
-import React, { useContext,useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Axiosinstance from "../services/Axios";
@@ -29,23 +29,92 @@ import {
   ChevronDownIcon,
   CubeTransparentIcon,
 } from "@heroicons/react/24/outline";
+import { Icon } from "@material-ui/core";
 
 export function PartnerDashboard() {
-  const{user}=useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
   const { logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
+  };
 
-  
+  const [isSidebarHidden, setSidebarHidden] = useState(false);
+
+  // Function to toggle the sidebar state
+  const toggleSidebar = () => {
+    setSidebarHidden(!isSidebarHidden);
   };
-  const[partner,Setpartner]=useState()
+
+  const [partner, Setpartner] = useState();
   const getproperties = (e) => {
-    navigate("/partnerproperties",{state:partner});
+    navigate("/partnerproperties", { state: partner });
   };
-  useEffect(()=>{
+  const [partnerrevenue,setPartnerrevenue]=useState(0)
+  const[bookinglatest,setBookinglatest]=useState([])
+  const [noofbooking,setnoofbooking]=useState(0)
+  const getnoofbooking=()=>{
+    try{
+Axiosinstance.get(`booking/gettotalnobooking/${user.user_id}`).then((response)=>{
+  
+  if(response){
+    setnoofbooking(response.data)
+    
+  }
+  else{
+    console.log("error")
+  }
+ 
+})
+    }
+    catch{
+      console.error("Error fetching data:");
+    }
+  }
+
+  console.log("object==noofbooking======",noofbooking)
+const fetchRevenue=()=>{ 
+  try {
+    Axiosinstance.get(`booking/get_revenue_amount/${user.user_id}/`)
+      .then((response) => {
+        if (response.data) {
+          console.log("Data:=====================", response.data);
+          setPartnerrevenue(response.data);
+        } else {
+          console.error("Error in response:", response);
+        }
+      })
+      .catch((error) => {
+        console.error("API request failed with error:", error);
+      });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    // setLoading(false);
+  }
+
+}
+
+console.log(partnerrevenue,"partbndheh")
+const latestbooking=()=>{
+  try{
+Axiosinstance.get(`booking/bookinglatest/${user.user_id}`).then((response)=>{
+  if (response.data) {
+  console.log("Data:=====================", response.data);
+  setBookinglatest(response.data);
+}
+ else {
+  console.error("Error in response:", response);
+}})
+  
+  }
+  catch{
+console.log("error")
+  }
+}
+
+  useEffect(() => {
     const fetchpropertyList = async () => {
       try {
         Axiosinstance.get(`api/Partnerprofile/${user.user_id}/`)
@@ -53,7 +122,6 @@ export function PartnerDashboard() {
             if (response.data) {
               console.log("Data:=====================", response.data);
               Setpartner(response.data);
-              
             } else {
               console.error("Error in response:", response);
             }
@@ -61,954 +129,873 @@ export function PartnerDashboard() {
           .catch((error) => {
             console.error("API request failed with error:", error);
           });
-    } catch (error) {
+      } catch (error) {
         console.error("Error fetching data:", error);
         // setLoading(false);
-   }
-  };
+      }
+    };
 
     fetchpropertyList();
+    fetchRevenue();
+    latestbooking();
+    getnoofbooking();
   }, []);
   return (
-    <div className="bg-gray-200 h-screen flex">
-      <div className="w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 overflow-y-auto fixed h-screen">
-        <Card className="w-full max-w-[20rem] p-8 shadow-xl shadow-blue-gray-900/5">
-          <div className="mb-2 p-4">
-            <Typography variant="h5" color="blue-gray">
-             Dahboard
-            </Typography>
-          </div>
-          <List>
-            <Accordion
-              open={open === 1}
-              icon={
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`mx-auto h-4 w-4 transition-transform ${
-                    open === 1 ? "rotate-180" : ""
-                  }`}
-                />
-              }
-            >
-              <ListItem className="p-0" selected={open === 1}>
-                <AccordionHeader
-                  onClick={() => handleOpen(1)}
-                  className="border-b-0 p-3"
-                >
-                  <ListItemPrefix>
-                    <PresentationChartBarIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  <Typography color="blue-gray" className="mr-auto font-normal">
-                    Dashboard
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
-              <AccordionBody className="py-1">
-                <List className="p-0">
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Analytics
-                  </ListItem>
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Reporting
-                  </ListItem>
-                  <ListItem>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Projects
-                  </ListItem>
-                </List>
-              </AccordionBody>
-            </Accordion>
-            <Accordion
-              open={open === 2}
-              icon={
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`mx-auto h-4 w-4 transition-transform ${
-                    open === 2 ? "rotate-180" : ""
-                  }`}
-                />
-              }
-            >
-              <ListItem className="p-0" selected={open === 2}>
-                <AccordionHeader
-                  onClick={() => handleOpen(2)}
-                  className="border-b-0 p-3"
-                >
-                  <ListItemPrefix>
-                    <ShoppingBagIcon className="h-5 w-5" />
-                  </ListItemPrefix>
-                  <Typography color="blue-gray"  className="mr-auto font-normal">
-                    Properties
+    <>
+      {/* component */}
+      {/* This is an example component */}
+      <div
+        className={`flex overflow-hidden bg-white  ${
+          isSidebarHidden ? "content-expanded" : ""
+        }`}
+      >
+        <nav className="bg-white border-b border-gray-200 fixed mt-5 z-30 w-full">
+          <button
+            className="lg:hidden mr-2  text-gray-600 hover:text-gray-900 cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
+            onClick={toggleSidebar}
+          >
+            {/* Use an icon for your toggle button */}
+            {isSidebarHidden ? (
+              <>
+                <ChevronRightIcon className="w-6 h-6" />
+                <span className="ml-2">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4 5L20 5"
+                      stroke="#141B34"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M4 12L20 12"
+                      stroke="#141B34"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M4 19L20 19"
+                      stroke="#141B34"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+              </>
+            ) : (
+              <>
+                <ChevronDownIcon className="w-6 h-6" />
+                <span className="ml-2">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4 5L20 5"
+                      stroke="#141B34"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M4 12L20 12"
+                      stroke="#141B34"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M4 19L20 19"
+                      stroke="#141B34"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+              </>
+            )}
+          </button>
+        </nav>
+        <div className="flex overflow-hidden bg-white pt-16">
+          <aside
+            id="sidebar"
+            className={`fixed z-20 h-full top-14 left-0 pt-16 flex lg:flex flex-shrink-0 flex-col w-64 transition-width duration-75 ${
+              isSidebarHidden ? "hidden" : ""
+            }`}
+            aria-label="Sidebar"
+          >
+            <div className="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
+              <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                <div className="flex-1 px-3 bg-white divide-y space-y-1">
+                  <ul className="space-y-2 pb-2">
+                    <li>
+                      <form action="#" method="GET" className="lg:hidden">
+                        <label htmlFor="mobile-search" className="sr-only">
+                          Search
+                        </label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg
+                              className="w-5 h-5 text-gray-500"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                          </div>
+                          <input
+                            type="text"
+                            name="email"
+                            id="mobile-search"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-600 focus:ring-cyan-600 block w-full pl-10 p-2.5"
+                            placeholder="Search"
+                          />
+                        </div>
+                      </form>
+                    </li>
+                    <li>
+                      <a className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
+                        <svg
+                          className="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+                          <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+                        </svg>
+                        <span className="ml-3">Dashboard</span>
+                      </a>
+                    </li>
 
-                  </Typography>
-                </AccordionHeader>
-              </ListItem>
-              <AccordionBody className="py-1">
-                <List className="p-0">
-                  <ListItem
-                    onClick={(e) => {
-                      navigate("/partnerroomsadd");
-                    }}
-                  >
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Add Properties
-                  </ListItem>
-                  <ListItem onClick={getproperties}>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    Properties
-                  </ListItem>
-                </List>
-              </AccordionBody>
-            </Accordion>
-            <hr className="my-2 border-blue-gray-50" />
-            <ListItem>
-              <ListItemPrefix>
-                <InboxIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Inbox
-              <ListItemSuffix>
-                <Chip
-                  value="14"
-                  size="sm"
-                  variant="ghost"
-                  color="blue-gray"
-                  className="rounded-full"
-                />
-              </ListItemSuffix>
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <UserCircleIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Profile
-            </ListItem>
-            <ListItem onClick={()=>{navigate('/chatpartner')}}>
-              <ListItemPrefix>
-                <Cog6ToothIcon className="h-5 w-5" />
-              </ListItemPrefix >
-              My Chats
-            </ListItem>
-            <ListItem onClick={logoutUser}>
-              <ListItemPrefix>
-                <PowerIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Log Out
-            </ListItem>
-          </List>
-        </Card>
-      </div>
-      <div className="flex-1 p-6 pt-3 overflow-y-auto ml-[20rem]">
-        {/* Content to display to the right of the sidebar */}
-        <section className="bg-gray-100 py-8">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-semibold p-5 mb-6">Property List</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              {/* Course Card 1 */}
-              <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                <div className="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                  <img
-                    src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                    alt="ui/ux review check"
-                  />
-                  <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60" />
-                  <button
-                    className="!absolute top-4 right-4 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-dark="true"
-                  >
-                    <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-6 w-6"
+                    <li>
+                      <a
+                        className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
+                        // onClick={(e) => {
+                        //   navigate("/partnerproperties");
+                        // }}
                       >
-                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                      </svg>
-                    </span>
-                  </button>
-                </div>
-                <div className="p-6">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h5 className="block font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased">
-                      Wooden House, Florida
-                    </h5>
-                    <p className="flex items-center gap-1.5 font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="-mt-0.5 h-5 w-5 text-yellow-700"
+                        <svg
+                          className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="ml-3 flex-1 whitespace-nowrap">
+                          My cusomers
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div
+                        className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group cursor-pointer"
+                        onClick={getproperties}
                       >
-                        <path
-                          fillRule="evenodd"
-                          d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      5.0
-                    </p>
-                  </div>
-                  <p className="block font-sans text-base font-light leading-relaxed text-gray-700 antialiased">
-                    Enter a freshly updated and thoughtfully furnished peaceful
-                    home surrounded by ancient trees, stone walls, and open
-                    meadows.
-                  </p>
-                  <div className="group mt-8 inline-flex flex-wrap items-center gap-3">
-                    <span
-                      data-tooltip-target="money"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
+                        <svg
+                          className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="ml-3 flex-1 whitespace-nowrap">
+                          Properties
+                        </span>
+                      </div>
+                    </li>
+
+                    <li>
+                      <a
+                        onClick={() => navigate("/partnerroomsadd")}
+                        className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                       >
-                        <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
-                          clipRule="evenodd"
-                        />
-                        <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="money"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      $129 per night
-                    </div>
-                    <span
-                      data-tooltip-target="wifi"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
+                        <svg
+                          className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="ml-3 flex-1 whitespace-nowrap">
+                          Add Properties
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        onClick={logoutUser}
+                        className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                       >
-                        <path
-                          fillRule="evenodd"
-                          d="M1.371 8.143c5.858-5.857 15.356-5.857 21.213 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.06 0c-4.98-4.979-13.053-4.979-18.032 0a.75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182c4.1-4.1 10.749-4.1 14.85 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.062 0 8.25 8.25 0 00-11.667 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.204 3.182a6 6 0 018.486 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0 3.75 3.75 0 00-5.304 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182a1.5 1.5 0 012.122 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0l-.53-.53a.75.75 0 010-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="wifi"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      Free wifi
-                    </div>
-                    <span
-                      data-tooltip-target="bedrooms"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
+                        <svg
+                          className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="ml-3 flex-1 whitespace-nowrap">
+                          Sign Out
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        onClick={() => {
+                          navigate("/getchatlistpartner");
+                        }}
+                        target="_blank"
+                        className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2"
                       >
-                        <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                        <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="bedrooms"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      2 bedrooms
-                    </div>
-                    <span
-                      data-tooltip-target="tv"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M19.5 6h-15v9h15V6z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v11.25C1.5 17.16 2.34 18 3.375 18H9.75v1.5H6A.75.75 0 006 21h12a.75.75 0 000-1.5h-3.75V18h6.375c1.035 0 1.875-.84 1.875-1.875V4.875C22.5 3.839 21.66 3 20.625 3H3.375zm0 13.5h17.25a.375.375 0 00.375-.375V4.875a.375.375 0 00-.375-.375H3.375A.375.375 0 003 4.875v11.25c0 .207.168.375.375.375z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="tv"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      64" HDTV
-                    </div>
-                    <span
-                      data-tooltip-target="fire"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="fire"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      Fire alert
-                    </div>
-                    <span
-                      data-tooltip-target="more"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      +20
-                    </span>
-                    <div
-                      data-tooltip="more"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      And +20 more
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6 pt-3">
-                  <button
-                    className="block w-full select-none rounded-lg bg-pink-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-light="true"
-                  >
-                    Reserve
-                  </button>
-                </div>
-              </div>
-              {/* Course Card 2 */}
-              <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                <div className="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                  <img
-                    src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                    alt="ui/ux review check"
-                  />
-                  <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60" />
-                  <button
-                    className="!absolute top-4 right-4 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-dark="true"
-                  >
-                    <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-6 w-6"
-                      >
-                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                      </svg>
-                    </span>
-                  </button>
-                </div>
-                <div className="p-6">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h5 className="block font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased">
-                      Wooden House, Florida
-                    </h5>
-                    <p className="flex items-center gap-1.5 font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="-mt-0.5 h-5 w-5 text-yellow-700"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      5.0
-                    </p>
-                  </div>
-                  <p className="block font-sans text-base font-light leading-relaxed text-gray-700 antialiased">
-                    Enter a freshly updated and thoughtfully furnished peaceful
-                    home surrounded by ancient trees, stone walls, and open
-                    meadows.
-                  </p>
-                  <div className="group mt-8 inline-flex flex-wrap items-center gap-3">
-                    <span
-                      data-tooltip-target="money"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
-                          clipRule="evenodd"
-                        />
-                        <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="money"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      $129 per night
-                    </div>
-                    <span
-                      data-tooltip-target="wifi"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M1.371 8.143c5.858-5.857 15.356-5.857 21.213 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.06 0c-4.98-4.979-13.053-4.979-18.032 0a.75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182c4.1-4.1 10.749-4.1 14.85 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.062 0 8.25 8.25 0 00-11.667 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.204 3.182a6 6 0 018.486 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0 3.75 3.75 0 00-5.304 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182a1.5 1.5 0 012.122 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0l-.53-.53a.75.75 0 010-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="wifi"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      Free wifi
-                    </div>
-                    <span
-                      data-tooltip-target="bedrooms"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                        <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="bedrooms"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      2 bedrooms
-                    </div>
-                    <span
-                      data-tooltip-target="tv"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M19.5 6h-15v9h15V6z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v11.25C1.5 17.16 2.34 18 3.375 18H9.75v1.5H6A.75.75 0 006 21h12a.75.75 0 000-1.5h-3.75V18h6.375c1.035 0 1.875-.84 1.875-1.875V4.875C22.5 3.839 21.66 3 20.625 3H3.375zm0 13.5h17.25a.375.375 0 00.375-.375V4.875a.375.375 0 00-.375-.375H3.375A.375.375 0 003 4.875v11.25c0 .207.168.375.375.375z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="tv"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      64" HDTV
-                    </div>
-                    <span
-                      data-tooltip-target="fire"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="fire"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      Fire alert
-                    </div>
-                    <span
-                      data-tooltip-target="more"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      +20
-                    </span>
-                    <div
-                      data-tooltip="more"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      And +20 more
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6 pt-3">
-                  <button
-                    className="block w-full select-none rounded-lg bg-pink-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-light="true"
-                  >
-                    Reserve
-                  </button>
-                </div>
-              </div>
-              <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                <div className="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                  <img
-                    src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                    alt="ui/ux review check"
-                  />
-                  <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60" />
-                  <button
-                    className="!absolute top-4 right-4 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-dark="true"
-                  >
-                    <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-6 w-6"
-                      >
-                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                      </svg>
-                    </span>
-                  </button>
-                </div>
-                <div className="p-6">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h5 className="block font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased">
-                      Wooden House, Florida
-                    </h5>
-                    <p className="flex items-center gap-1.5 font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="-mt-0.5 h-5 w-5 text-yellow-700"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      5.0
-                    </p>
-                  </div>
-                  <p className="block font-sans text-base font-light leading-relaxed text-gray-700 antialiased">
-                    Enter a freshly updated and thoughtfully furnished peaceful
-                    home surrounded by ancient trees, stone walls, and open
-                    meadows.
-                  </p>
-                  <div className="group mt-8 inline-flex flex-wrap items-center gap-3">
-                    <span
-                      data-tooltip-target="money"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
-                          clipRule="evenodd"
-                        />
-                        <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="money"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      $129 per night
-                    </div>
-                    <span
-                      data-tooltip-target="wifi"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M1.371 8.143c5.858-5.857 15.356-5.857 21.213 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.06 0c-4.98-4.979-13.053-4.979-18.032 0a.75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182c4.1-4.1 10.749-4.1 14.85 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.062 0 8.25 8.25 0 00-11.667 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.204 3.182a6 6 0 018.486 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0 3.75 3.75 0 00-5.304 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182a1.5 1.5 0 012.122 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0l-.53-.53a.75.75 0 010-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="wifi"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      Free wifi
-                    </div>
-                    <span
-                      data-tooltip-target="bedrooms"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                        <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="bedrooms"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      2 bedrooms
-                    </div>
-                    <span
-                      data-tooltip-target="tv"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M19.5 6h-15v9h15V6z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v11.25C1.5 17.16 2.34 18 3.375 18H9.75v1.5H6A.75.75 0 006 21h12a.75.75 0 000-1.5h-3.75V18h6.375c1.035 0 1.875-.84 1.875-1.875V4.875C22.5 3.839 21.66 3 20.625 3H3.375zm0 13.5h17.25a.375.375 0 00.375-.375V4.875a.375.375 0 00-.375-.375H3.375A.375.375 0 003 4.875v11.25c0 .207.168.375.375.375z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="tv"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      64" HDTV
-                    </div>
-                    <span
-                      data-tooltip-target="fire"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="fire"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      Fire alert
-                    </div>
-                    <span
-                      data-tooltip-target="more"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      +20
-                    </span>
-                    <div
-                      data-tooltip="more"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      And +20 more
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6 pt-3">
-                  <button
-                    className="block w-full select-none rounded-lg bg-pink-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-light="true"
-                  >
-                    Reserve
-                  </button>
-                </div>
-              </div>              <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                <div className="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-                  <img
-                    src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                    alt="ui/ux review check"
-                  />
-                  <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60" />
-                  <button
-                    className="!absolute top-4 right-4 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-dark="true"
-                  >
-                    <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-6 w-6"
-                      >
-                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                      </svg>
-                    </span>
-                  </button>
-                </div>
-                <div className="p-6">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h5 className="block font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased">
-                      Wooden House, Florida
-                    </h5>
-                    <p className="flex items-center gap-1.5 font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="-mt-0.5 h-5 w-5 text-yellow-700"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      5.0
-                    </p>
-                  </div>
-                  <p className="block font-sans text-base font-light leading-relaxed text-gray-700 antialiased">
-                    Enter a freshly updated and thoughtfully furnished peaceful
-                    home surrounded by ancient trees, stone walls, and open
-                    meadows.
-                  </p>
-                  <div className="group mt-8 inline-flex flex-wrap items-center gap-3">
-                    <span
-                      data-tooltip-target="money"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
-                          clipRule="evenodd"
-                        />
-                        <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="money"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      $129 per night
-                    </div>
-                    <span
-                      data-tooltip-target="wifi"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M1.371 8.143c5.858-5.857 15.356-5.857 21.213 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.06 0c-4.98-4.979-13.053-4.979-18.032 0a.75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182c4.1-4.1 10.749-4.1 14.85 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.062 0 8.25 8.25 0 00-11.667 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.204 3.182a6 6 0 018.486 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0 3.75 3.75 0 00-5.304 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182a1.5 1.5 0 012.122 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0l-.53-.53a.75.75 0 010-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="wifi"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      Free wifi
-                    </div>
-                    <span
-                      data-tooltip-target="bedrooms"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                        <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="bedrooms"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      2 bedrooms
-                    </div>
-                    <span
-                      data-tooltip-target="tv"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path d="M19.5 6h-15v9h15V6z" />
-                        <path
-                          fillRule="evenodd"
-                          d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v11.25C1.5 17.16 2.34 18 3.375 18H9.75v1.5H6A.75.75 0 006 21h12a.75.75 0 000-1.5h-3.75V18h6.375c1.035 0 1.875-.84 1.875-1.875V4.875C22.5 3.839 21.66 3 20.625 3H3.375zm0 13.5h17.25a.375.375 0 00.375-.375V4.875a.375.375 0 00-.375-.375H3.375A.375.375 0 003 4.875v11.25c0 .207.168.375.375.375z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="tv"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      64" HDTV
-                    </div>
-                    <span
-                      data-tooltip-target="fire"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                    <div
-                      data-tooltip="fire"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      Fire alert
-                    </div>
-                    <span
-                      data-tooltip-target="more"
-                      className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
-                    >
-                      +20
-                    </span>
-                    <div
-                      data-tooltip="more"
-                      className="absolute z-50 whitespace-normal break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white focus:outline-none"
-                    >
-                      And +20 more
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6 pt-3">
-                  <button
-                    className="block w-full select-none rounded-lg bg-pink-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-light="true"
-                  >
-                    Reserve
-                  </button>
+                        <svg
+                          className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                          <path
+                            fillRule="evenodd"
+                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="ml-3">My Chats</span>
+                      </a>
+                    </li>
+                  </ul>
+             
                 </div>
               </div>
             </div>
+          </aside>
+          <div
+            className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10"
+            id="sidebarBackdrop"
+          />
+          <div
+            id="main-content"
+            className="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64"
+          >
+            <main>
+              <div className="pt-6 px-4">
+                <div className="p-10 text-2xl font-bold  bg-gray-300  ">
+                  Dashboard
+                </div>
+                <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
+                  <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-2">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex-shrink-0">
+                        <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
+                         Rs: {partnerrevenue}
+                        </span>
+                        <h3 className="text-base font-normal text-gray-500">
+                         Totel Revenue
+                        </h3>
+                      </div>
+                    
+                    </div>
+                    <div id="main-chart" />
+                  </div>
+                  <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                    <div className="mb-4 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                          Latest Booking
+                        </h3>
+                        <span className="text-base font-normal text-gray-500">
+                          This is a list of latest Booking
+                        </span>
+                      </div>
+                      <div className="flex-shrink-0">
+                        {/* <a className="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2">
+                          View all
+                        </a> */}
+                      </div>
+                    </div>
+                    <div className="flex flex-col mt-8">
+                      <div className="overflow-x-auto rounded-lg">
+                        <div className="align-middle inline-block min-w-full">
+                          <div className="shadow overflow-hidden sm:rounded-lg">
+                            <table className="min-w-full divide-y divide-gray-200">
+                              <thead className="bg-gray-50">
+                                <tr>
+                                  <th
+                                    scope="col"
+                                    className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Transaction
+                                  </th>
+                                  <th
+                                    scope="col"
+                                    className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Date From &amp; To
+                                  </th>
+                                  <th
+                                    scope="col"
+                                    className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Amount Share
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="bg-white">
+                              {bookinglatest.map((booking)=>(    <tr>
+                                 
+                                 <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
+                                   Payment from : 
+                                   <span className="font-semibold">
+                                   {booking.user.user.username}
+                                   </span>
+                                 </td>
+                                 <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
+                                  {booking.check_in_date}--{booking.check_out_date}
+                                 </td>
+                                 <td className="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                   {0.7*booking.total_amount}
+                                 </td>
+                               </tr>))}
+                            
+                                
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                  <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
+                          {noofbooking}
+                        </span>
+                        <h3 className="text-base font-normal text-gray-500">
+                          Total Booking
+                        </h3>
+                      </div>
+                     
+                    </div>
+                  </div>
+                  <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
+                          5,355
+                        </span>
+                        <h3 className="text-base font-normal text-gray-500">
+                          Visitors this week
+                        </h3>
+                      </div>
+                      <div className="ml-5 w-0 flex items-center justify-end flex-1 text-green-500 text-base font-bold">
+                        32.9%
+                        <svg
+                          className="w-5 h-5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
+                          385
+                        </span>
+                        <h3 className="text-base font-normal text-gray-500">
+                          User signups this week
+                        </h3>
+                      </div>
+                      <div className="ml-5 w-0 flex items-center justify-end flex-1 text-red-500 text-base font-bold">
+                        -2.7%
+                        <svg
+                          className="w-5 h-5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
+                  <div className="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-bold leading-none text-gray-900">
+                        Latest Customers
+                      </h3>
+                      <a className="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                        View all
+                      </a>
+                    </div>
+                    <div className="flow-root">
+                      <ul role="list" className="divide-y divide-gray-200">
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                className="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/neil-sims.png"
+                                alt="Neil image"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                Neil Sims
+                              </p>
+                              <p className="text-sm text-gray-500 truncate">
+                                <a
+                                  href="/cdn-cgi/l/email-protection"
+                                  className="__cf_email__"
+                                  data-cfemail="17727a767e7b57607e7973646372653974787a"
+                                >
+                                  [email&nbsp;protected]
+                                </a>
+                              </p>
+                            </div>
+                            <div className="inline-flex items-center text-base font-semibold text-gray-900">
+                              $320
+                            </div>
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                className="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/bonnie-green.png"
+                                alt="Neil image"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                Bonnie Green
+                              </p>
+                              <p className="text-sm text-gray-500 truncate">
+                                <a
+                                  href="/cdn-cgi/l/email-protection"
+                                  className="__cf_email__"
+                                  data-cfemail="d4b1b9b5bdb894a3bdbab0a7a0b1a6fab7bbb9"
+                                >
+                                  [email&nbsp;protected]
+                                </a>
+                              </p>
+                            </div>
+                            <div className="inline-flex items-center text-base font-semibold text-gray-900">
+                              $3467
+                            </div>
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                className="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/michael-gough.png"
+                                alt="Neil image"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                Michael Gough
+                              </p>
+                              <p className="text-sm text-gray-500 truncate">
+                                <a
+                                  href="/cdn-cgi/l/email-protection"
+                                  className="__cf_email__"
+                                  data-cfemail="57323a363e3b17203e3933242332257934383a"
+                                >
+                                  [email&nbsp;protected]
+                                </a>
+                              </p>
+                            </div>
+                            <div className="inline-flex items-center text-base font-semibold text-gray-900">
+                              $67
+                            </div>
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                className="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/thomas-lean.png"
+                                alt="Neil image"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                Thomes Lean
+                              </p>
+                              <p className="text-sm text-gray-500 truncate">
+                                <a
+                                  href="/cdn-cgi/l/email-protection"
+                                  className="__cf_email__"
+                                  data-cfemail="284d45494144685f41464c5b5c4d5a064b4745"
+                                >
+                                  [email&nbsp;protected]
+                                </a>
+                              </p>
+                            </div>
+                            <div className="inline-flex items-center text-base font-semibold text-gray-900">
+                              $2367
+                            </div>
+                          </div>
+                        </li>
+                        <li className="pt-3 sm:pt-4 pb-0">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                className="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/lana-byrd.png"
+                                alt="Neil image"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                Lana Byrd
+                              </p>
+                              <p className="text-sm text-gray-500 truncate">
+                                <a
+                                  href="/cdn-cgi/l/email-protection"
+                                  className="__cf_email__"
+                                  data-cfemail="a2c7cfc3cbcee2d5cbccc6d1d6c7d08cc1cdcf"
+                                >
+                                  [email&nbsp;protected]
+                                </a>
+                              </p>
+                            </div>
+                            <div className="inline-flex items-center text-base font-semibold text-gray-900">
+                              $367
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                    <h3 className="text-xl leading-none font-bold text-gray-900 mb-10">
+                      Acquisition Overview
+                    </h3>
+                    <div className="block w-full overflow-x-auto">
+                      <table className="items-center w-full bg-transparent border-collapse">
+                        <thead>
+                          <tr>
+                            <th className="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">
+                              Top Channels
+                            </th>
+                            <th className="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">
+                              Users
+                            </th>
+                            <th className="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap min-w-140-px" />
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                          <tr className="text-gray-500">
+                            <th className="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">
+                              Organic Search
+                            </th>
+                            <td className="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">
+                              5,649
+                            </td>
+                            <td className="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+                              <div className="flex items-center">
+                                <span className="mr-2 text-xs font-medium">
+                                  30%
+                                </span>
+                                <div className="relative w-full">
+                                  <div className="w-full bg-gray-200 rounded-sm h-2">
+                                    <div
+                                      className="bg-cyan-600 h-2 rounded-sm"
+                                      style={{ width: "30%" }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="text-gray-500">
+                            <th className="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">
+                              Referral
+                            </th>
+                            <td className="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">
+                              4,025
+                            </td>
+                            <td className="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+                              <div className="flex items-center">
+                                <span className="mr-2 text-xs font-medium">
+                                  24%
+                                </span>
+                                <div className="relative w-full">
+                                  <div className="w-full bg-gray-200 rounded-sm h-2">
+                                    <div
+                                      className="bg-orange-300 h-2 rounded-sm"
+                                      style={{ width: "24%" }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="text-gray-500">
+                            <th className="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">
+                              Direct
+                            </th>
+                            <td className="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">
+                              3,105
+                            </td>
+                            <td className="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+                              <div className="flex items-center">
+                                <span className="mr-2 text-xs font-medium">
+                                  18%
+                                </span>
+                                <div className="relative w-full">
+                                  <div className="w-full bg-gray-200 rounded-sm h-2">
+                                    <div
+                                      className="bg-teal-400 h-2 rounded-sm"
+                                      style={{ width: "18%" }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="text-gray-500">
+                            <th className="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">
+                              Social
+                            </th>
+                            <td className="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">
+                              1251
+                            </td>
+                            <td className="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+                              <div className="flex items-center">
+                                <span className="mr-2 text-xs font-medium">
+                                  12%
+                                </span>
+                                <div className="relative w-full">
+                                  <div className="w-full bg-gray-200 rounded-sm h-2">
+                                    <div
+                                      className="bg-pink-600 h-2 rounded-sm"
+                                      style={{ width: "12%" }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="text-gray-500">
+                            <th className="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">
+                              Other
+                            </th>
+                            <td className="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">
+                              734
+                            </td>
+                            <td className="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+                              <div className="flex items-center">
+                                <span className="mr-2 text-xs font-medium">
+                                  9%
+                                </span>
+                                <div className="relative w-full">
+                                  <div className="w-full bg-gray-200 rounded-sm h-2">
+                                    <div
+                                      className="bg-indigo-600 h-2 rounded-sm"
+                                      style={{ width: "9%" }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="text-gray-500">
+                            <th className="border-t-0 align-middle text-sm font-normal whitespace-nowrap p-4 pb-0 text-left">
+                              Email
+                            </th>
+                            <td className="border-t-0 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4 pb-0">
+                              456
+                            </td>
+                            <td className="border-t-0 align-middle text-xs whitespace-nowrap p-4 pb-0">
+                              <div className="flex items-center">
+                                <span className="mr-2 text-xs font-medium">
+                                  7%
+                                </span>
+                                <div className="relative w-full">
+                                  <div className="w-full bg-gray-200 rounded-sm h-2">
+                                    <div
+                                      className="bg-purple-500 h-2 rounded-sm"
+                                      style={{ width: "7%" }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+            <footer className="bg-white md:flex md:items-center md:justify-between shadow rounded-lg p-4 md:p-6 xl:p-8 my-6 mx-4">
+              <ul className="flex items-center flex-wrap mb-6 md:mb-0">
+                <li>
+                  <a className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">
+                    Terms and conditions
+                  </a>
+                </li>
+                <li>
+                  <a className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">
+                    Licensing
+                  </a>
+                </li>
+                <li>
+                  <a className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">
+                    Cookie Policy
+                  </a>
+                </li>
+                <li>
+                  <a className="text-sm font-normal text-gray-500 hover:underline">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+              <div className="flex sm:justify-center space-x-6">
+                <a href="#" className="text-gray-500 hover:text-gray-900">
+                  <svg
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </a>
+                <a href="#" className="text-gray-500 hover:text-gray-900">
+                  <svg
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </a>
+                <a href="#" className="text-gray-500 hover:text-gray-900">
+                  <svg
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                  </svg>
+                </a>
+                <a href="#" className="text-gray-500 hover:text-gray-900">
+                  <svg
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </a>
+                <a href="#" className="text-gray-500 hover:text-gray-900">
+                  <svg
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </footer>
+            <p className="text-center text-sm text-gray-500 my-10">
+              © 2019-2021{" "}
+              <a href="#" className="hover:underline" target="_blank">
+                Themesberg
+              </a>
+              . All rights reserved.
+            </p>
           </div>
-        </section>
+        </div>
       </div>
-    </div>
+    </>
+
+
   );
 }
 
