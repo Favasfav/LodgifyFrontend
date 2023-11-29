@@ -48,32 +48,6 @@ function UserList() {
     }}
   
   
-    //   if (id.block){
-    //     setBlock(false)
-    //   } else{
-    //     setBlock(true)
-    //   }
-    //   if (response.status === 201) {
-        
-    //     Swal.fire({
-        
-    //       title: 'Success',
-    //       text: 'Account Modified!',
-    //       icon: 'success',
-    //       confirmButtonText: 'OK',
-    //     }).then(() => {
-    //       console.log("Block",block)
-    //        navigate('/userlist');
-    //     });
-      
-
-    // } }
-    // catch (error) {
-    //   console.error('Error fetching data:', error);
-      
-      
-    // }
-  // }
   useEffect(() => {
     const fetchUserList = async () => {
       try {
@@ -98,7 +72,7 @@ function UserList() {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-8">
       <h2 className="text-3xl font-semibold mb-4">User List</h2>
       <ul role="list" className="divide-y divide-gray-100">
         {userList.map((user, index) => (

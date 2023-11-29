@@ -345,11 +345,11 @@ function App() {
           <Route path="/Partnerdashboard" element={<Partnerdashboard />} />
           <Route
             path="/admindashbord"
-            element={<PrivateRouteadmin element={<Admindashboard />} />}
+            element={<Admindashboard />} 
           />
           <Route
             path="/userlist"
-            element={<PrivateRouteuser element={<Userlist />} />}
+            element={<Userlist />} 
           />
           <Route path="/ProfileUpdateModel" element={<ProfileUpdateModel />} />
           <Route

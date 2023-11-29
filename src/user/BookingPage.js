@@ -194,7 +194,7 @@ export default function BookingPage() {
 return days+1
     
   }
-  const amt = (roomqty * property.single_room_price * 100*no_of_days())*-1;
+  const amt = (roomqty * property.single_room_price * 100*no_of_days());
   console.log("amt", amt);
   const razorpayPayment = () => {
     Axiosinstance.post(
@@ -205,7 +205,7 @@ return days+1
       }
     )
       .then(function (response) {
-        console.log(response);
+        console.log("response",response);
         const order_id = response.data.data.id;
 
         const options = {

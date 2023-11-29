@@ -6,14 +6,14 @@ function Adminlogin() {
     const { loginUser, superuser,setsuperuser } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     
-    const handleLoginAdmin = (e) => {
+    const handleLoginAdmin = async(e) => {
         e.preventDefault();
         console.log("submittttttttttt from adminlogin");
         if (superuser === 'False') {
             setsuperuser('True');
         }
         console.log("superuser", superuser);
-        loginUser(e);
+        await loginUser(e);
     }
 
     useEffect(() => {

@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Axiosinstance from "../services/Axios";
 import AuthContext from "../context/AuthContext";
 import { useContext } from "react";
-import type { DatePickerProps} from "antd";
-import { DatePicker, Space,InputNumber } from "antd";
+import type { DatePickerProps } from "antd";
+import { DatePicker, Space, InputNumber } from "antd";
 import moment from "moment";
 
 import {
@@ -123,19 +123,25 @@ export default function Detailedpropertyuser() {
     fetchUserList();
   }, []);
 
-
-
-
   const checkforRooms = async (propertyId) => {
     Axiosinstance.post(
       `booking/checkroomavailblity/${propertyId}/${checkindate}/${checkoutdate}/${roomqty}`
     )
       .then((response) => {
         console.log("Data:", response.data);
-        Swal.fire({title: 'Availabe for Booking!',
-        text: 'I will close in 2 seconds.',
-        timer: 2000})
-        navigate("/bookingpage", { state: { propertyId: propertyId ,checkindate:checkindate,checkoutdate:checkoutdate,roomqty:roomqty} });
+        Swal.fire({
+          title: "Availabe for Booking!",
+          text: "I will close in 2 seconds.",
+          timer: 2000,
+        });
+        navigate("/bookingpage", {
+          state: {
+            propertyId: propertyId,
+            checkindate: checkindate,
+            checkoutdate: checkoutdate,
+            roomqty: roomqty,
+          },
+        });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -148,9 +154,6 @@ export default function Detailedpropertyuser() {
         });
       });
   };
-
-
-
 
   return (
     <div className="p-10  ">
@@ -394,8 +397,9 @@ export default function Detailedpropertyuser() {
                   <Button
                     color="purple"
                     onClick={() => {
-                      navigate("/chat",{state
-                        :{property:property.partner.user.id}});
+                      navigate("/chat", {
+                        state: { property: property.partner.user.id },
+                      });
                     }}
                     size="lg"
                     fullWidth={true}
@@ -405,12 +409,11 @@ export default function Detailedpropertyuser() {
                 ) : (
                   <p></p>
                 )}
-                
               </CardFooter>
             </div>
           </div>
           <div style={evenColumnStyle}>
-            <div class="w-full max-w-[26rem] shadow-lg">
+            <div class="w-full max-w-[26rem]  shadow-lg">
               <div>
                 <div className="px-4 sm:px-0">
                   <h3 className="text-base font-semibold leading-7 text-gray-900">
@@ -560,62 +563,58 @@ export default function Detailedpropertyuser() {
                     <p>No amenities available.</p>
                   )}
                 </div>
-                
               </div>
-              
             </div>
             {user ? (
-                  <Space direction="horizontal" style={{ padding: 15 }}>
-                    {/* <p>from</p>
+              <Space direction="horizontal" style={{ padding: 15 }}>
+                {/* <p>from</p>
     <DatePicker onChange={onChange} />
     <p>to</p>
     <DatePicker onChange={onChange1} /> */}
 
-                    <RangePicker
-                    required
-                      format="YYYY-MM-DD "
-                      onChange={onChangerange}
-                      onOk={onOk}
-                      disabledDate={disabledDate}
-                    />
-                    <p>Room Quantity</p>
-                    <InputNumber
-                      min={1}
-                      required
-                      max={property.total_rooms}
-                     
-                      onChange={onChange}
-                    />
-                    <Button
-
-                      color="purple"
-                      onClick={() => {
-                        if (checkindate && checkoutdate&&roomqty) {
-                          checkforRooms(property.id);
-                        } else
-                          Swal.fire({
-                            title: "Error",
-                            text: "Please Fill The Date or Room Quantity",
-                            icon: "error",
-                            confirmButtonText: "OK",
-                          });
-                      }}
-                      size="lg"
-                      fullWidth={true}
-                    >
-                      Check Availablity
-                    </Button>
-                  </Space>
-                ) : (
-                  <Button
-                    onClick={() => {
-                      navigate("/login");
-                    }}
-                    color="green"
-                  >
-                    Clich Here To Login
-                  </Button>
-                )}
+                <RangePicker
+                  required
+                  format="YYYY-MM-DD "
+                  onChange={onChangerange}
+                  onOk={onOk}
+                  disabledDate={disabledDate}
+                />
+                <p>Room Quantity</p>
+                <InputNumber
+                  min={1}
+                  required
+                  max={property.total_rooms}
+                  onChange={onChange}
+                />
+                <Button
+                  color="purple"
+                  onClick={() => {
+                    if (checkindate && checkoutdate && roomqty) {
+                      checkforRooms(property.id);
+                    } else
+                      Swal.fire({
+                        title: "Error",
+                        text: "Please Fill The Date or Room Quantity",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                      });
+                  }}
+                  size="lg"
+                  fullWidth={true}
+                >
+                  Check Availablity
+                </Button>
+              </Space>
+            ) : (
+              <Button
+                onClick={() => {
+                  navigate("/login");
+                }}
+                color="green"
+              >
+                Clich Here To Login
+              </Button>
+            )}
           </div>
         </div>
       ) : (

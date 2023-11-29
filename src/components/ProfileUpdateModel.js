@@ -13,7 +13,7 @@ function ProfileUpdateModel() {
   const [formphno, setFormphno] = useState('');
   const [formprofile_photo,Setformprofile_photo]=useState('null')
   
-  const {user,setUser}=useContext(AuthContext)
+  const {user}=useContext(AuthContext)
 
   const handleChange = async(e) => {
     const { name, value } = e.target;

@@ -17,7 +17,7 @@ function Header() {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  console.log("user=====================",user)
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -159,7 +159,7 @@ function Header() {
                         My Bookings
                       </Typography>
                     </MenuItem>
-                    <MenuItem onClick={()=>navigate('/chatlist')} className="flex items-center gap-2">
+                    <MenuItem onClick={()=>{user.role==="user"?navigate('/chatlist'):navigate('/getchatlistpartner')}} className="flex items-center gap-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

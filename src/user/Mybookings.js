@@ -5,6 +5,7 @@ import { Table } from 'flowbite-react';
 import React,{useState,useEffect, useContext} from 'react';
 import Axiosinstance from '../services/Axios';
 import AuthContext from '../context/AuthContext';
+import { request } from 'websocket';
 
 export default function Mybookings() {
     const [bookinglist,setBookinglist]=useState([])
@@ -14,6 +15,7 @@ export default function Mybookings() {
           try {
             const response =await Axiosinstance.get(`booking/bookinglist/${user.user_id}`);
             console.log("response.data",response.data)
+
             setBookinglist(response.data);
             
             
@@ -29,21 +31,32 @@ export default function Mybookings() {
       }, []);
     
       
-const cancelorder=async(booking_id)=>{
-    console.log(booking_id)
-    const data={
-        "booking_id":booking_id
-
+      const cancelorder = async (booking_id) => {
+        console.log(booking_id);
+        const data = {
+            "booking_id": booking_id
+        };
+    
+        try {
+            const response = await Axiosinstance.post('booking/cancelbooking/', data);
+    
+            if (response.status === 200) {
+                // Create a new array with the updated booking status
+                const updatedBookings = bookinglist.map(booking =>
+                    booking.id === booking_id ? { ...booking, is_cancelled: true } : booking
+                );
+    
+                setBookinglist(updatedBookings);
+            }
+        } catch (error) {
+            console.error('Error canceling booking:', error);
+        }
     };
-    await Axiosinstance.post('booking/cancelbooking/',data).then(function(response){
-        console.log(response.data)
-    }
-    )
-}
+    
 
 
 return (
-    <div className="p-20 bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl lg:max-w-full">
+    <div className="p-10 bg-white rounded-xl shadow-md  md:max-w-2xl lg:max-w-full">
       {bookinglist ? (
         <Table>
           <Table.Head>
@@ -62,7 +75,7 @@ return (
             {bookinglist.map((booking) => (
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={booking.id}>
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {booking.room.property_name}
+                {booking.room && booking.room.property_name ? booking.room.property_name : 'N/A'}
                 </Table.Cell>
                 <Table.Cell>{booking.check_in_date}</Table.Cell>
                 <Table.Cell>{booking.check_out_date}</Table.Cell>
