@@ -383,6 +383,7 @@ import Axiosinstance from '../../services/Axios';
 import { w3cwebsocket } from 'websocket';
 import AuthContext from '../../context/AuthContext';
 import { useLocation } from 'react-router-dom';
+import { chatUrl } from '../../constants';
 
 export default function Chat() {
   const [webSocket, setWebSocket] = useState(null);
@@ -427,7 +428,7 @@ export default function Chat() {
     console.log('user.id', user);
    
    
-    const socket = new w3cwebsocket(`ws://127.0.0.1:8000/ws/chat/${otherUserId}/?${currentUserId}`);
+    const socket = new w3cwebsocket(`ws://${chatUrl}/ws/chat/${otherUserId}/?${currentUserId}`);
     socket.onopen = () => {
       console.log('WebSocket connection opened');
     };

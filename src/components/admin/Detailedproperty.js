@@ -49,21 +49,20 @@ const mediaQueryStyle = {
 export default function Detailedproperty() {
   console.log("Location state:");
   const location = useLocation();
-  console.log("Location state:-------------", location.state);
+  
   const propertyId = location.state.propertyId;
   const [property, Setproperty] = useState([]);
   const navigate = useNavigate();
-  console.log("property-----------", property);
+  
   useEffect(() => {
-    console.log("propertyId----------------", propertyId);
-    console.log("property-----------", property);
+    
     const fetchUserList = async () => {
       try {
        
         Axiosinstance.get(`partner/propertyview/${propertyId}/`)
           .then((response) => {
             if (response.data) {
-              console.log("Data:=====================", response.data);
+             
               Setproperty(response.data);
             } else {
               console.error("Error in response:", response);
@@ -74,7 +73,7 @@ export default function Detailedproperty() {
           });
       } catch (error) {
         console.error("Error fetching data:", error);
-        // setLoading(false);
+        
       }
     };
 

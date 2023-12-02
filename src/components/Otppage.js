@@ -15,12 +15,10 @@ function Otppage() {
   
   const otpverification = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-    console.log("hhhhhhhhhhhhhhhhhh")
-    console.log("formdata,anotherData",formData1)
-    console.log("hhhhhhhhhhhhhhhhhh",otp,"ppppppppppppppppppppp",formData1.otp)
-    if (otp === formData1.otp) {
+    
+    
       try {
-        console.log("fffffffffffffffffffffffff",formData1.itsuser)
+        if (otp === formData1.otp) {
         
         const response = await fetch(formData1.itsuser==='True'?'http://127.0.0.1:8000/api/signup/':'http://127.0.0.1:8000/api/Partnersignup/', {
           method: 'POST',
@@ -39,25 +37,30 @@ function Otppage() {
             icon: 'success',
             confirmButtonText: 'OK',
           }).then(() => {
-             navigate('/login')
+             navigate('/')
           });
-        } 
-       else {
-       
+         }
+        }
+        else(
           Swal.fire({
-            title: 'Error',
-            text: "Email or User Already Excist",
-            icon: 'error',
-            confirmButtonText: 'OK',
-            
-          });
-          navigate('/Signup')
-         
-      }
-      } catch (error) {
-        return("")
+            title: 'Otp incorrect!',
+            text: 'I will close in 2 seconds.',
+            timer: 2000
+          })
         
-      }
+         
+          
+        )
+        
+   
+      } catch (error) {
+        Swal.fire({
+          title: 'Incorrect Error!',
+          text: 'I will close in 2 seconds.',
+          timer: 2000 
+        })
+        
+      
     }
   };
   

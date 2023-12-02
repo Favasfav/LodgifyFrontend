@@ -16,9 +16,8 @@ import {
 } from "@heroicons/react/20/solid";
 
 const sortOptions = [
- 
-  { name: "Newest",  current: false },
-  { name: "Price: Low to High",  current: false },
+  { name: "Newest", current: false },
+  { name: "Price: Low to High", current: false },
   { name: "Price: High to Low", current: false },
 ];
 
@@ -35,9 +34,9 @@ const filters = [
     id: "category",
     name: "Category",
     options: [
-      { value: "1-star", label: "1-star", checked: false },
-      { value: "3-star", label: "3-star", checked: false },
-      { value: "4-stat", label: "4-star", checked: false },
+      { value: "1_star", label: "1_star", checked: false },
+      { value: "3_Star", label: "3_stars", checked: false },
+      { value: "4_Star", label: "4_stars", checked: false },
       {
         value: "deluxe_premium_luxury",
         label: "deluxe_premium_luxury",
@@ -73,115 +72,116 @@ const filters = [
   },
 ];
 function LocationProperty() {
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-    const location = useLocation();
-    const maplocation = location.state?.maplocation1;
-    const navigate = useNavigate();
-    const [properties, setProperties] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [propertytype, setpropertytype] = useState([]);
-    const [amenities, setAmenities] = useState([]);
-    const [category, setCategory] = useState([]);
-    const [selectedFilters, setSelectedFilters] = useState({});
-  
-    // Function to handle filter changes and fetch filtered data
-    const handleFilterChange = (filterId, value) => {
-        if (filterId === "Amenities") {
-          setAmenities((amenities) => {
-            if (amenities.includes(value)) {
-              return amenities.filter((item) => item !== value);
-            } else {
-              return [...amenities, value];
-            }
-          });
-        } else if (filterId === "category") {
-          setCategory((category) => {
-            if (category.includes(value)) {
-              return category.filter((item) => item !== value);
-            } else {
-              return [...category, value];
-            }
-          });
-        } else if (filterId === "Property_Type") {
-          setpropertytype((propertytype) => {
-            if (propertytype.includes(value)) {
-              return propertytype.filter((item) => item !== value);
-            } else {
-              return [...propertytype, value];
-            }
-          });
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const location = useLocation();
+  const maplocation = location.state?.maplocation1;
+  const navigate = useNavigate();
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [propertytype, setpropertytype] = useState([]);
+  const [amenities, setAmenities] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({});
+
+  // Function to handle filter changes and fetch filtered data
+  const handleFilterChange = (filterId, value) => {
+    if (filterId === "Amenities") {
+      setAmenities((amenities) => {
+        if (amenities.includes(value)) {
+          return amenities.filter((item) => item !== value);
+        } else {
+          return [...amenities, value];
         }
-      };
-
-
-const handlesortoption=(value)=>{
-  if(value==="Price: Low to High"){
-    const filteredProperty = properties.slice(); // Create a copy of the original properties
-    filteredProperty.sort((a, b) => a.total_room_price - b.total_room_price);
-    setProperties(filteredProperty);
-  }
-  if(value==="Price: High to Low"){
-    const filteredProperty = properties.slice(); // Create a copy of the original properties
-    filteredProperty.sort((a, b) => b.total_room_price - a.total_room_price);
-    setProperties(filteredProperty);
-  }
-  if(value==="Newest"){
-    const filteredProperty = properties.slice(); // Create a copy of the original properties
-    filteredProperty.sort((a, b) => b.id - a.id);
-
-    setProperties(filteredProperty);
-  }
-}
-
-    useEffect(() => {
-     
-      let url = `partner/getpropertybylocation/${maplocation}`;
-  
-  
-
-      const queryParams = [];
-
-      if (amenities.length > 0) {
-        queryParams.push(`Amenities=${amenities.join(',')}`);
-      }
-      if (category.length > 0) {
-        queryParams.push(`category=${category.join(',')}`);
-      }
-      if (propertytype.length > 0) {
-        queryParams.push(`Property_Type=${propertytype.join(',')}`);
-      }
-    
-      // Check if there are query parameters to append
-      if (queryParams.length > 0) {
-        url += `?${queryParams.join('&')}`;
-      }
-
-  
-      const fetchData = async () => {
-        try {
-          const response = await Axiosinstance.get(url);
-          if (response.data) {
-            setProperties(response.data);
-          } else {
-            setError("No data available.");
-          }
-        } catch (error) {
-          setError("Error fetching data. Please try again later.");
-        } finally {
-          setLoading(false);
+      });
+    } else if (filterId === "category") {
+      console.log("objecategoryct", category.includes(value));
+      setCategory((category) => {
+        if (category.includes(value)) {
+          return category.filter((item) => item !== value);
+        } else {
+          return [...category, value];
         }
-      };
-  
-      if (maplocation) {
-        fetchData();
+      });
+    } else if (filterId === "Property_Type") {
+      setpropertytype((propertytype) => {
+        if (propertytype.includes(value)) {
+          return propertytype.filter((item) => item !== value);
+        } else {
+          return [...propertytype, value];
+        }
+      });
+    }
+  };
+
+  const handlesortoption = (value) => {
+    if (value === "Price: Low to High") {
+      const filteredProperty = properties.slice(); // Create a copy of the original properties
+      filteredProperty.sort((a, b) => a.total_room_price - b.total_room_price);
+      setProperties(filteredProperty);
+    }
+    if (value === "Price: High to Low") {
+      const filteredProperty = properties.slice(); // Create a copy of the original properties
+      filteredProperty.sort((a, b) => b.total_room_price - a.total_room_price);
+      setProperties(filteredProperty);
+    }
+    if (value === "Newest") {
+      const filteredProperty = properties.slice(); // Create a copy of the original properties
+      filteredProperty.sort((a, b) => b.id - a.id);
+
+      setProperties(filteredProperty);
+    }
+  };
+
+  useEffect(() => {
+    let url = `partner/getpropertybylocation/${maplocation}`;
+
+    const queryParams = [];
+
+    if (amenities.length > 0) {
+      // queryParams.push(`Amenities=${amenities.join(",")}`);
+      amenities.forEach((amt)=>queryParams.push(`amenities=${amt}`))
+    }
+
+    if (category.length > 0) {
+      // Pass each category as a separate parameter
+      category.forEach((cat) => queryParams.push(`category=${cat}`));
+    }
+
+    if (propertytype.length > 0) {
+      queryParams.push(`Property_Type=${propertytype.join(",")}`);
+    }
+
+    // Check if there are query parameters to append
+    if (queryParams.length > 0) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    console.log("url", url);
+    const fetchData = async () => {
+      try {
+        const response = await Axiosinstance.get(url);
+        if (response.data) {
+          setProperties(response.data);
+        } else {
+          setError("No data available.");
+        }
+      } catch (error) {
+        setError("Error fetching data. Please try again later.");
+      } finally {
+        setLoading(false);
       }
-    }, [maplocation, amenities,category,propertytype]);
-  
-    console.log("selectedFilters", selectedFilters);
-    console.log("properties------", properties);
-    console.log("object",amenities,propertytype,category)
-  
+    };
+
+    if (maplocation) {
+      fetchData();
+    }
+  }, [maplocation, amenities, category, propertytype]);
+
+  console.log("selectedFilters", selectedFilters);
+  console.log("properties------", properties);
+  console.log("object", amenities, propertytype, category);
+
   return (
     <div className="bg-white">
       <div>
@@ -300,10 +300,9 @@ const handlesortoption=(value)=>{
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Book Your Hotel
             </h1>
-           
+
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
-             
                 <div>
                   <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                     Sort
@@ -329,8 +328,9 @@ const handlesortoption=(value)=>{
                         <Menu.Item key={option.name}>
                           {({ active }) => (
                             <button
-                          
-                              onClick={(e)=>{handlesortoption(option.name)}}
+                              onClick={(e) => {
+                                handlesortoption(option.name);
+                              }}
                               className={classNames(
                                 option.current
                                   ? "font-medium text-gray-900"
@@ -374,7 +374,7 @@ const handlesortoption=(value)=>{
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
-              <form   className="hidden lg:block">
+              <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
 
                 {filters.map((section) => (
@@ -412,17 +412,17 @@ const handlesortoption=(value)=>{
                                 key={option.value}
                                 className="flex items-center"
                               >
-                              
                                 <input
-                                id={`filter-${section.id}-${optionIdx}`}
-                                name={`${section.id}[]`}
-                                defaultValue={option.value}
-                                type="checkbox"
-                                defaultChecked={option.checked}
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                onChange={() => handleFilterChange(section.id, option.value)}
-/>
-
+                                  id={`filter-${section.id}-${optionIdx}`}
+                                  name={`${section.id}[]`}
+                                  defaultValue={option.value}
+                                  type="checkbox"
+                                  defaultChecked={option.checked}
+                                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  onChange={() =>
+                                    handleFilterChange(section.id, option.value)
+                                  }
+                                />
 
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
@@ -451,7 +451,6 @@ const handlesortoption=(value)=>{
                         Popular Properties in {maplocation}
                       </h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
-                        
                         {properties &&
                           properties.map((property, index) => (
                             <div className="relative flex w-full max-w-[26rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">

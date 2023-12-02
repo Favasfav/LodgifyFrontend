@@ -91,10 +91,10 @@ export default function BookingPage() {
 
   console.log("checkoutdate,checkindate", checkoutdate, checkindate);
   useEffect(() => {
-    console.log("propertyId----------------", propertyId);
-    console.log("property-----------", property);
+    
     const fetchUserList = async () => {
       try {
+        
         Axiosinstance.get(`partner/propertyview/${propertyId}/`)
           .then((response) => {
             if (response.data) {

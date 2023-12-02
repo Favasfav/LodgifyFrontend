@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Axiosinstance from "../services/Axios";
 import MapComponent from "../partner/MapComponent";
 import { Button } from "@material-tailwind/react";
-
+import './Home.css' 
 import LocationSearch from "../user/LocationSearch ";
 import AuthContext from "../context/AuthContext";
 
@@ -91,6 +91,8 @@ function Home() {
     };
 
     fetchpropertyList();
+
+    window.scrollTo(0, 0)
   }, []);
   const searchedproperty = useMemo(() => {
     return properties.filter((property) =>
@@ -237,59 +239,65 @@ function Home() {
           </div>
           {/* </div> */}
         </section>
-        <div className="flex flex-col md:flex-row justify-center items-center">
-          {/* Flex Item 1 */}
-          <div className="text-white p-4 m-2 md:flex-1">
-            <div className="p-4 rounded">
-              <a
-                href="#"
-                className="block max-w-sm p-6 bg-yellow-400 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-              >
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  Noteworthy technology acquisitions 2021
-                </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
-                  Here are the biggest enterprise technology acquisitions of
-                  2021 so far, in reverse chronological order.
-                </p>
-              </a>
+<section>
+    <div class="scrolling-wrapper">
+        <div class="scrolling-content">
+            <div class="card rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 p-4 text-white">
+                <i class="fas fa-bed fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Hotel Booking</h3>
+                <p class="text-sm">Find the perfect accommodation for your stay.</p>
             </div>
-          </div>
-          {/* Flex Item 2 */}
-          <div className="text-white p-4 m-2 md:flex-1">
-            <div className="p-4 rounded">
-              <a
-                href="#"
-                className="block max-w-sm p-6 bg-green-400 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-              >
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  Noteworthy technology acquisitions 2021
-                </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
-                  Here are the biggest enterprise technology acquisitions of
-                  2021 so far, in reverse chronological order.
-                </p>
-              </a>
+            <div class="card rounded-md bg-gradient-to-r from-green-500 to-teal-400 p-4 text-white">
+                <i class="fas fa-map-marker-alt fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Location</h3>
+                <p class="text-sm">Explore hotels in prime and convenient locations.</p>
             </div>
-          </div>
-          {/* Flex Item 3 */}
-          <div className=" p-4 m-2 md:flex-1">
-            <div className="p-4 rounded ">
-              <a
-                href="#"
-                className="block max-w-sm p-6 bg-red-500 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-              >
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  Noteworthy technology acquisitions 2021
-                </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
-                  Here are the biggest enterprise technology acquisitions of
-                  2021 so far, in reverse chronological order.
-                </p>
-              </a>
+            <div class="card rounded-md bg-gradient-to-r from-yellow-400 to-orange-500 p-4 text-white">
+                <i class="fas fa-calendar-alt fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Reservation</h3>
+                <p class="text-sm">Book your room for specific dates with ease.</p>
             </div>
-          </div>
+            <div class="card rounded-md bg-gradient-to-r from-red-500 to-pink-500 p-4 text-white">
+                <i class="fas fa-wifi fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Amenities</h3>
+                <p class="text-sm">Enjoy complimentary Wi-Fi and other facilities.</p>
+            </div>
+            <div class="card rounded-md bg-gradient-to-r from-purple-500 to-indigo-400 p-4 text-white">
+                <i class="fas fa-star fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Rating & Reviews</h3>
+                <p class="text-sm">Check ratings and reviews for a memorable experience.</p>
+            </div>
+
+            <div class="card rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 p-4 text-white">
+                <i class="fas fa-coffee fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Coffee Shop</h3>
+                <p class="text-sm">Discover nearby coffee shops for a delightful experience.</p>
+            </div>
+            <div class="card rounded-md bg-gradient-to-r from-green-500 to-teal-400 p-4 text-white">
+                <i class="fas fa-swimming-pool fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Pool</h3>
+                <p class="text-sm">Relax by the poolside with our hotels offering swimming facilities.</p>
+            </div>
+            <div class="card rounded-md bg-gradient-to-r from-yellow-400 to-orange-500 p-4 text-white">
+                <i class="fas fa-concierge-bell fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Concierge Service</h3>
+                <p class="text-sm">Experience top-notch concierge services for a luxurious stay.</p>
+            </div>
+            <div class="card rounded-md bg-gradient-to-r from-red-500 to-pink-500 p-4 text-white">
+                <i class="fas fa-car fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Transportation</h3>
+                <p class="text-sm">Explore convenient transportation options available near your hotel.</p>
+            </div>
+            <div class="card rounded-md bg-gradient-to-r from-purple-500 to-indigo-400 p-4 text-white">
+                <i class="fas fa-gift fa-2x"></i>
+                <h3 class="text-lg font-semibold mt-2">Special Offers</h3>
+                <p class="text-sm">Check out exclusive offers and discounts for a budget-friendly stay.</p>
+            </div>
         </div>
+    </div>
+</section>
+
+
         <section className="bg-gray-100 py-8">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-semibold mb-6">Popular Properties</h2>
@@ -521,38 +529,7 @@ function Home() {
             </div>
           </div>
         </section>
-        <section className="bg-gray-100 py-8">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-semibold mb-6">Latest Courses</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {/* Course Card 1 */}
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h3 className="text-xl font-semibold mb-2">Course Title 1</h3>
-                <p className="text-gray-600 mb-4">Description of Course 1.</p>
-                <a href="#" className="text-blue-500 hover:underline">
-                  Learn More
-                </a>
-              </div>
-              {/* Course Card 2 */}
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h3 className="text-xl font-semibold mb-2">Course Title 2</h3>
-                <p className="text-gray-600 mb-4">Description of Course 2.</p>
-                <a href="#" className="text-blue-500 hover:underline">
-                  Learn More
-                </a>
-              </div>
-              {/* Course Card 3 */}
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h3 className="text-xl font-semibold mb-2">Course Title 3</h3>
-                <p className="text-gray-600 mb-4">Description of Course 3.</p>
-                <a href="#" className="text-blue-500 hover:underline">
-                  Learn More
-                </a>
-              </div>
-              {/* Add more Course Cards as needed */}
-            </div>
-          </div>
-        </section>
+    
 
         {/*        
         <div className="flex w-full">

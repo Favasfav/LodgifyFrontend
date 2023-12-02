@@ -10,9 +10,9 @@ import { useLocation } from "react-router-dom";
 
 export default function Propertyblock() {
     const location = useLocation();
-    console.log("Location state:-------------", location.state);
+   
     const propertyId = location.state.propertyId;
-    console.log("propertyId",propertyId)
+    
   const { RangePicker } = DatePicker;
   const [startdate, setstartdate] = useState(null);
   const [enddate, setenddate] = useState(null);
@@ -28,7 +28,7 @@ export default function Propertyblock() {
     setenddate(dateString[1]);
   };
   const handleSubmit=()=>{
-    console.log("hhhhhhhhhhhhh")
+    
     try{
        
 Axiosinstance.post(`booking/blockproperty/${propertyId}/`,{

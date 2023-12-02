@@ -28,7 +28,7 @@ function Profileview() {
       setOpen((cur) => !cur);
       Axiosinstance.get(`api/wallet/${user.user_id}`).then(response => {
                     setWalletBalance(response.data.balance);
-                    console.log("iiiiiiiiiiiiiiiiiiiiiiii",response.data)
+                    
                 })
                 .catch(error => {
                     console.error('Error fetching wallet balance:', error);
@@ -37,8 +37,8 @@ function Profileview() {
   useEffect(() => {
     const fetchuserList = async () => {
       
-      console.log("user111111111111111",user)
-        const response = await axios.get(`http://127.0.0.1:8000/api/userprofile/${user.user_id}`)
+      
+        const response = await Axiosinstance.get(`/api/userprofile/${user.user_id}`)
         console.log("user",user)
         console.log("response.data",response.data)
         setuser1(response.data);

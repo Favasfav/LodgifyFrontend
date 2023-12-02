@@ -175,32 +175,7 @@ function Editproperty() {
       "formdata---------------------------------id---------",
       property.id
     );
-    //   try{let response=Axiosinstance.put(`partner/updateproperty/${property.id}/`,formData)
-    //   console.log("response.status",response.status)
-    //   if (response.status === 200) {
-    //     console.log("hhhhhh");
-
-    //     Swal.fire({
-    //       title: "Success",
-    //       text: "Account Updated successfully!",
-    //       icon: "success",
-    //       confirmButtonText: "OK",
-    //     }).then((response) => {
-    //       console.log("ggggggggggggggggggggggggggggggggggggggggg");
-    //        navigate('/Partnerdashboard');
-    //     });
-    //   } else if (response.username) {
-    //     Swal.fire({
-    //       title: "Error",
-    //       text: response.username,
-    //       icon: "error",
-    //       confirmButtonText: "OK",
-    //     });
-    //   }}
-    //   catch
-    //    {
-    //     alert("Something went wrong");
-    //   }
+ 
 
     Axiosinstance.put(`partner/updateproperty/${property.id}/`, formData)
       .then((response) => {

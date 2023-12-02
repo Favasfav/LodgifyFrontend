@@ -29,7 +29,9 @@ export default function Bookinglistall() {
         };
         console.log("bookinglist",bookinglist)
         fetchUserList();
-      }, []);
+        window.scrollTo(0, 0)
+      }
+      , []);
     
       
 const cancelorder=async(booking_id)=>{

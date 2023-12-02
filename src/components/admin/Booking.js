@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import Axiosinstance from '../../services/Axios';
+import AuthContext from '../../context/AuthContext';
 
 // Generate Order Data
 function createData(id, date, name, shipTo, paymentMethod, amount) {
@@ -22,10 +23,13 @@ function preventDefault(event) {
 
 export default function Booking() {
   const [bookinglatest,setbookinglatest]=useState([])
+  const {user}=React.useContext(AuthContext)
   useEffect(()=>{
     const fetchbooking=async()=>{
       try {
-await Axiosinstance.get("booking/latestsale").then((response)=>{
+        const token = localStorage.getItem('authTokens');
+        const data={token:token}
+await Axiosinstance.get("booking/latestsale",data=data).then((response)=>{
   setbookinglatest(response.data)
   console.log("setbookinglatest",response.data)
 })
@@ -63,9 +67,7 @@ fetchbooking()
           ))}
         </TableBody>
       </Table>
-      {/* <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        See more orders
-      </Link> */}
+    
     </React.Fragment>
   );
 }

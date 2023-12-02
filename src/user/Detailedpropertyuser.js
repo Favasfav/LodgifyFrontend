@@ -57,7 +57,7 @@ export default function Detailedpropertyuser() {
   const location = useLocation();
   console.log("Location state:-------------", location.state);
   const propertyId = location.state.propertyId;
-  const [property, Setproperty] = useState([]);
+  const [property, Setproperty] = useState({});
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [checkindate, setCheckindate] = useState("");
@@ -66,17 +66,7 @@ export default function Detailedpropertyuser() {
 
   console.log("property-----------", property);
 
-  // const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-  //   console.log(date, dateString);
-  //   setCheckindate(dateString);
 
-  // };
-
-  // const onChange1: DatePickerProps['onChange'] = (date, dateString) => {
-  //   console.log(date, dateString);
-  //   setCheckoutdate(dateString);
-
-  // };
   const { RangePicker } = DatePicker;
   const onChangerange = (value, dateString) => {
     console.log("Selected Time: ", value);

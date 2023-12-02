@@ -43,75 +43,42 @@ export const AuthProvider = ({ children }) => {
     const email1 = e.target.email.value;
     const password1 = e.target.password.value;
     let url;
-    console.log("superuser,,,,,,,,,,,");
-
+  
     if (superuser === "True") {
-      // If superuser is 'True', use this URL
       url = "http://127.0.0.1:8000/api/adminlogin/";
     } else {
-      // If not a superuser, check itspartner and choose the URL
       url =
         itspartner === "False"
           ? "http://127.0.0.1:8000/api/token/"
           : "http://127.0.0.1:8000/api/partnerlogin/";
     }
-
-    console.log("submitted", email1, password1);
-
-    const response = await axios.post(url, {
-      email: email1,
-      password: password1,
-    });
-
-    console.log("fronend");
-    let data = response.data;
-    console.log("data", data);
-    console.log("respose", response.status);
-
+  
+    
+  
     try {
-      if (response.status === 400 ) {
-        Swal.fire({
-          title: "User Blocked",
-          text: "Your account has been blocked. Please contact support for assistance.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      }
-      if (response.status === 404 ) {
-        Swal.fire({
-          title: "User Blocked or Not Defined",
-          text: "Your account has been blocked. Please contact support for assistance.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      }
-
-      if (response.status === 200) {
-       
-        setUserdetails(response.data)
-        const decodedToken = jwt_decode(data.access);
-        console.log(decodedToken, "----------------------->token");
+      const response = await axios.post(url, {
+        email: email1,
+        password: password1,
+      });
+       if (response.status === 200) {
+        setUserdetails(response.data);
+        const decodedToken = jwt_decode(response.data.access);
         setIsSuperuser(decodedToken.is_superuser);
-        if (decodedToken.is_superuser) {
-          // The user is a superuser
+        console.log("========",response.data)
+        if (decodedToken.role==='admin') {
           console.log("User is a superuser");
         } else {
-          // The user is not a superuser
           console.log("User is not a superuser");
         }
-        console.log("======================userdetails",userdetails)
-        setAuthToken(data);
-        setUser(jwt_decode(data.access));
-
-        console.log(
-          "data:.....username......partnername..",
-          jwt_decode(data.access)
-        );
-        localStorage.setItem("authTokens", JSON.stringify(data));
-        console.log("istapartner", itspartner);
+  
+        setAuthToken(response.data);
+        setUser(jwt_decode(response.data.access));
+  
+        localStorage.setItem("authTokens", JSON.stringify(response.data));
+  
         if (itspartner === "True") {
           navigate("/Partnerdashboard");
-        } else if (superuser === "True") {
+        } else if (decodedToken.role==='admin') {
           console.log("heretonavigate");
           navigate("/admindashbord");
         } else {
@@ -119,22 +86,21 @@ export const AuthProvider = ({ children }) => {
         }
       } else {
         Swal.fire({
-          title: "User Blocked",
-          text: "Your account has been blocked or Not a member . Please contact support for assistance.",
+          title: "Error",
+          text: "An unexpected error occurred. Please try again later.",
           icon: "error",
           confirmButtonText: "OK",
         });
       }
     } catch (error) {
       Swal.fire({
-        title: "User Blocked",
-        text: error.message,
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+        title: 'Invalid Credentials Or U ser is blocked !',
+        text: 'I will close in 2 seconds.',
+        timer: 2000
+      })
     }
-   
   };
+  
   let logoutUser = () => {
     setAuthToken(null);
     setUser(null);
@@ -144,7 +110,7 @@ export const AuthProvider = ({ children }) => {
     navigate("/");
   };
 
-
+ 
   let contextData = {
     loginUser: loginUser,
     user: user,

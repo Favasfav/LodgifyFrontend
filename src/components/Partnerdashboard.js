@@ -64,7 +64,7 @@ Axiosinstance.get(`booking/gettotalnobooking/${user.user_id}`).then((response)=>
     
   }
   else{
-    console.log("error")
+    setnoofbooking(0)
   }
  
 })
@@ -281,7 +281,7 @@ console.log("error")
                       </a>
                     </li>
 
-                    <li>
+                    {/* <li>
                       <a
                         className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                         // onClick={(e) => {
@@ -304,7 +304,7 @@ console.log("error")
                           My cusomers
                         </span>
                       </a>
-                    </li>
+                    </li> */}
                     <li>
                       <div
                         className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group cursor-pointer"

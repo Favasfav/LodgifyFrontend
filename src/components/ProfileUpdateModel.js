@@ -31,9 +31,7 @@ function ProfileUpdateModel() {
       
     }
 
-    // function handleChangeimage(e){
-    //   console.log(e.target.files[0])
-    //   Setformprofile_photo(e.target.files[0])
+  
 
     
     
@@ -52,8 +50,7 @@ function ProfileUpdateModel() {
     // const file = inputFileRef.current.files[0];
       const handleSubmit = async (e) => {
             e.preventDefault();
-            console.log("ststes---------------------",formphno,formname,"jjjjjjjjjjjjjjj",formprofile_photo)
-            console.log("itssubmit")
+            
             if (formname.trim() === '') {
               return Swal.fire({
                 title: 'Error',

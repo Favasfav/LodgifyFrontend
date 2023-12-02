@@ -262,7 +262,7 @@ import Home from "./components/Home";
 import Otppage from "./components/Otppage";
 import SignupPartner from "./components/SignupPartner";
 import Partnerdashboard from "./components/Partnerdashboard";
-import Addproperty from "./components/Addproperty";
+
 import Adminlogin from "./components/admin/Adminlogin";
 import Admindashboard from "./components/admin/Admindashbord";
 import Userlist from "./components/admin/Userlist";
@@ -288,6 +288,7 @@ import Chatpartner from "./components/Chats/Chatpartner";
 import Chatlist from "./components/Chats/Chatlist";
 import Chatlistpartner from "./components/Chats/Chatlistpartner";
 import Propertyblock from "./partner/Propertyblock";
+import NotFound from "./Pages/NotFound";
 function PrivateRouteuser({ element }) {
   console.log("hi");
 
@@ -335,39 +336,20 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/SignupPartner" element={<SignupPartner />} />
           <Route path="/otppage" element={<Otppage />} />
-          <Route path="/Addproperty" element={<Addproperty />} />
+         
           <Route path="/" element={<Home />} />
-
           <Route path="/Adminlogin" element={<Adminlogin />} />
           <Route path="/bookingpage" element={<BookingPage />} />
           <Route path="/profileviwe" element={<Profileview />} />
 
           <Route path="/Partnerdashboard" element={<Partnerdashboard />} />
-          <Route
-            path="/admindashbord"
-            element={<Admindashboard />} 
-          />
-          <Route
-            path="/userlist"
-            element={<Userlist />} 
-          />
+          <Route path="/admindashbord" element={<Admindashboard />} />
+          <Route path="/userlist" element={<Userlist />} />
           <Route path="/ProfileUpdateModel" element={<ProfileUpdateModel />} />
-          <Route
-            path="/partnerroomsadd"
-             element={<Partnerroomsadd  />}
-          />
-          <Route
-            path="/pendingproperty"
-            element={<Verificationrequest  />}
-          />
-          <Route
-            path="/propertylist"
-            element={<Allpropertylist  />}
-          />
-          <Route
-            path="/partnerproperties"
-             element={<Partnerproperties />}
-          />
+          <Route path="/partnerroomsadd" element={<Partnerroomsadd />} />
+          <Route path="/pendingproperty" element={<Verificationrequest />} />
+          <Route path="/propertylist" element={<Allpropertylist />} />
+          <Route path="/partnerproperties" element={<Partnerproperties />} />
           <Route
             path="/Detailedpropertiespartner"
             element={<Detailedviewpartner />}
@@ -392,7 +374,11 @@ function App() {
           <Route path="/chatlist" element={<Chatlist />} />
           <Route path="/getchatlistpartner" element={<Chatlistpartner />} />
           <Route path="/getchatpartner" element={<Chatpartner />} />
-          <Route path='Detailedpropertiespartner/blockpropertypartner' element={<Propertyblock/>}/>
+          <Route
+            path="Detailedpropertiespartner/blockpropertypartner"
+            element={<Propertyblock />}
+          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       <Footer />

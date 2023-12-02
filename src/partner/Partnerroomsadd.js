@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
+import Axiosinstance from "../services/Axios";
 
 function Partnerroomsadd() {
   const navigate = useNavigate();
@@ -40,10 +41,9 @@ function Partnerroomsadd() {
   useEffect(() => {
     const fetchuserList = async () => {
       
-      console.log("user111111111111111",user)
-        const response = await axios.get(`http://127.0.0.1:8000/api/Partnerprofile/${user.user_id}`)
-        console.log("user",user)
-        console.log("response.data--------------------------------------lllllll",response.data)
+  
+        const response = await Axiosinstance.get(`api/Partnerprofile/${user.user_id}`)
+        
         setPartner(response.data);
         
        
@@ -202,12 +202,12 @@ function Partnerroomsadd() {
         icon: "success",
         confirmButtonText: "OK",
       }).then(() => {
-        console.log("ggggggggggggggggggggggggggggggggggggggggg");
+       
          navigate('/Partnerdashboard');
       });
     } else if (data.username) {
       Swal.fire({
-        title: "Error",
+        title: "There is a problem in These Days Or You Are Not Autherised ",
         text: data.username,
         icon: "error",
         confirmButtonText: "OK",

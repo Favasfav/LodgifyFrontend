@@ -1,0 +1,29 @@
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-220px * 5));
+    }
+}
+.scrolling-wrapper {
+    display: flex;
+    overflow: hidden;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+.scrolling-content {
+    display: flex;
+    animation: scroll 30s linear infinite;
+}
+.scrolling-content:hover {
+    animation-play-state: paused;
+}
+.card {
+    min-width: 260px;
+    height: 150px;
+    margin-right: 1rem;
+    background-clip: padding-box;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}

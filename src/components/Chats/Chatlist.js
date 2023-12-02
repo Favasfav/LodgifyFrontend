@@ -11,6 +11,7 @@ const {user}=useContext(AuthContext)
 console.log(user)
 const [chats,setchats]=useState([])
 useEffect(() => {
+    window.scrollTo(0, 0)
     const fetchData = async () => {
         try {
             const response = await Axiosinstance.get(`chats/getchatlist/${user.user_id}`);

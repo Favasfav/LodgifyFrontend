@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import Axiosinstance from '../../services/Axios';
 
 function UserList() {
   const [userList, setUserList] = useState([]);
@@ -13,8 +14,8 @@ function UserList() {
     // console.log("newStatus,user.user.username",user.user.username,newStatus)
 
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/userblock/${user.user.id}`)
-
+      
+      const response=await Axiosinstance.get(`api/userblock/${user.user.id}`)
        .then((response)=>{
 
         const updateduser = userList.map((customer)=>{
@@ -30,16 +31,7 @@ function UserList() {
           return customer;
         });
         setUserList(updateduser);
-        // Swal.fire({
-        
-        //         title: 'Success',
-        //         text: 'Account Modified!',
-        //         icon: 'success',
-        //         confirmButtonText: 'OK',
-        //       }).then(() => {
-        //         console.log("Block",block)
-        //          navigate('/userlist');
-        //       });
+  
       })
     
     }catch (error) {
@@ -51,7 +43,7 @@ function UserList() {
   useEffect(() => {
     const fetchUserList = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/userlist/');
+        const response = await Axiosinstance.get('api/userlist/');
         console.log("response.data",response.data)
         setUserList(response.data);
         setLoading(false);

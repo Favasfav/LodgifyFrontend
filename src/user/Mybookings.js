@@ -11,6 +11,7 @@ export default function Mybookings() {
     const [bookinglist,setBookinglist]=useState([])
     const {user}=useContext(AuthContext)
     useEffect(() => {
+      
         const fetchUserList = async () => {
           try {
             const response =await Axiosinstance.get(`booking/bookinglist/${user.user_id}`);
