@@ -5,7 +5,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 const MapComponent = ({ location, setLocation }) => {
     useEffect(() => {
-    mapboxgl.accessToken = process.env.mapboxgl.accessToken1;
+    mapboxgl.accessToken = process.env.mapboxgl.accessTokens;
 
     const map = new mapboxgl.Map({
       container: 'map',
