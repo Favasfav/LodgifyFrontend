@@ -71,9 +71,9 @@ export default function BookingPage() {
   const [Razorpay] = useRazorpay();
   console.log("property-----------", property);
   
-  const onChange = (value: number) => {
-    console.log("changed", value);
-    setroomqty(value);
+  const onChange = (number) => {
+   
+    setroomqty(number);
   };
 
   const { RangePicker } = DatePicker;

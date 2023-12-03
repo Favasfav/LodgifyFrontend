@@ -4,6 +4,7 @@ import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { baseUrl } from "../constants";
 const AuthContext = createContext();
 
 export default AuthContext;
@@ -45,12 +46,12 @@ export const AuthProvider = ({ children }) => {
     let url;
   
     if (superuser === "True") {
-      url = "http://127.0.0.1:8000/api/adminlogin/";
+      url = `${baseUrl}/api/adminlogin/`;
     } else {
       url =
         itspartner === "False"
-          ? "http://127.0.0.1:8000/api/token/"
-          : "http://127.0.0.1:8000/api/partnerlogin/";
+          ? `${baseUrl}/api/token/`
+          : `${baseUrl}/api/partnerlogin/`;
     }
   
     

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Axiosinstance from "../services/Axios";
 import AuthContext from "../context/AuthContext";
 import { useContext } from "react";
-import type { DatePickerProps } from "antd";
+
 import { DatePicker, Space, InputNumber } from "antd";
 import moment from "moment";
 
@@ -82,9 +82,9 @@ export default function Detailedpropertyuser() {
     // Disable dates before today
     return current && current < moment().startOf("day");
   };
-  const onChange = (value: number) => {
-    console.log("changed", value);
-    setroomqty(value);
+  const onChange = ( number) => {
+    console.log("changed", number);
+    setroomqty(number);
   };
   console.log("checkoutdate,checkindate", checkoutdate, checkindate);
   useEffect(() => {
