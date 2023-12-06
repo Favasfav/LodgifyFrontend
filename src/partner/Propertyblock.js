@@ -142,7 +142,7 @@ Axiosinstance.post(`booking/blockproperty/${propertyId}/`,{
               your account, including but not limited to email or other
               electronic means.{" "}
             </p>
-            {/* <div className="mt-10 flex items-center justify-center gap-x-6">
+            <div className="mt-10 flex items-center justify-center gap-x-6">
               <RangePicker
                 required
                 format="YYYY-MM-DD "
@@ -157,8 +157,50 @@ Axiosinstance.post(`booking/blockproperty/${propertyId}/`,{
                 Click Here To Proceed
               </button>
             </div>
-             */}
-             
+            
+              {/* <div className="relative bg-white px-4 sm:px-10 md:px-[76px] py-6 sm:py-9 md:py-[70px] mt-5 sm:-mt-[166px] shadow-lg rounded-xl flex flex-col gap-4 sm:gap-8">
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+                    
+                    <div className="flex-1">
+                      <label for="pickUpDate" className="text-blue-500">
+                        From
+                      </label>
+                      <div className="relative h-12 rounded-[4px]">
+                        <input
+                          type="date"
+                          id="pickUpDate"
+                          placeholder="22/12/23"
+                          onChange={(e) => {
+                            const formattedDate = formatDate(e.target.value);
+                            setfromdate(formattedDate);
+                          }}
+                          min={new Date().toISOString().split("T")[0]}
+                          className="absolute bottom-0 left-0 text-gray-500 placeholder-gray-600 w-full border h-full rounded-[4px] border-gray-300 py-2 sm:py-[14px] pl-4 sm:pl-[22px] pr-9 sm:pr-11 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex-1">
+                      <label for="returnDate" className="text-blue-500">
+                        To
+                      </label>
+                      <div className="relative h-12 rounded-[4px]">
+                        <input
+                          type="date"
+                          id="returnDate"
+                          placeholder="31/12/223"
+                          onChange={(e) => {
+                            const formattedDate = formatDate(e.target.value);
+                            settodate(formattedDate);
+                          }}
+                          className="absolute bottom-0 left-0 text-gray-500 placeholder-gray-600 w-full border h-full rounded-[4px] border-gray-300 py-2 sm:py-[14px] pl-4 sm:pl-[22px] pr-9 sm:pr-11 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  
+                </div> */}
 
 
 

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import Otppage from "./Otppage";
+
 import { baseUrl } from "../constants";
-import PhoneInput from "react-phone-number-input";
+
 
 function Signup() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ function Signup() {
   const [formpassword2, setFormpassword2] = useState("");
   const [formphno, setFormphno] = useState("");
   const [formemail, Setformemail] = useState("");
-  const [error, seterror] = useState("");
+ 
 
   function validatePhoneNumber(phoneNumber) {
     console.log("haiii");
