@@ -5,6 +5,7 @@ import React, { useEffect,useRef, useState,useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import AuthContext from '../context/AuthContext';
+import { baseUrl } from '../constants';
 function ProfileUpdateModel() {
   const navigate = useNavigate();
   // const [itsuser,setUser]=useState("True")
@@ -14,7 +15,12 @@ function ProfileUpdateModel() {
   const [formprofile_photo,Setformprofile_photo]=useState('null')
   
   const {user}=useContext(AuthContext)
+  function validatePhoneNumber(phoneNumber) {
+    console.log("haiii");
+    const phoneRegex = /^\d{10}$/;
 
+    return phoneRegex.test(phoneNumber);
+  }
   const handleChange = async(e) => {
     const { name, value } = e.target;
     console.log("value",value)
@@ -24,7 +30,11 @@ function ProfileUpdateModel() {
     }
     
       else if (name === 'contact') {
-        setFormphno(value);
+        if (validatePhoneNumber(value)) {
+          // Phone number is valid
+          setFormphno(value);
+          console.log("Valid phone number:", formphno);
+        }
       }
       
      
@@ -81,9 +91,9 @@ function ProfileUpdateModel() {
         console.log("formdat",formData.get('profile_photo'))
         console.log("id",user.user_id)
     
-let response = await fetch(`http://127.0.0.1:8000/api/profileupdate/${user.user_id}/`, {
+let response = await fetch(`${baseUrl}api/profileupdate/${user.user_id}/`, {
   method: 'POST',
-  body: formData, // Use the FormData object
+  body: formData, 
 });
     let data = await response.json();
           console.log("hhhhhh",data)

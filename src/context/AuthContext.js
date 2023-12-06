@@ -46,12 +46,12 @@ export const AuthProvider = ({ children }) => {
     let url;
   
     if (superuser === "True") {
-      url = `${baseUrl}/api/adminlogin/`;
+      url = `${baseUrl}api/adminlogin/`;
     } else {
       url =
         itspartner === "False"
-          ? `${baseUrl}/api/token/`
-          : `${baseUrl}/api/partnerlogin/`;
+          ? `${baseUrl}api/token/`
+          : `${baseUrl}api/partnerlogin/`;
     }
   
     

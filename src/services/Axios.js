@@ -8,18 +8,21 @@ const Axiosinstance = axios.create({
 
 Axiosinstance.interceptors.request.use(
   config => {
+    console.log("interceptors")
+  
       const token = localStorage.getItem('authTokens');
       console.log("token", token);
       const tokenObject = JSON.parse(token);
-      console.log("tokenObject",tokenObject.access)
+     
       if (token) {
           config.headers['Authorization'] = `Bearer ${tokenObject.access}`;
       }
-      // config.headers['Content-Type'] = 'application/json';
+      
       console.log("config",config)
-      return config; // Don't forget to return the config object
+      return config; 
   },
   error => {
+    console.log("hlooo")
       return Promise.reject(error);
   }
 );

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Otppage from './Otppage';
+import { baseUrl } from '../constants';
 
 function SignupPartner() {
   const navigate = useNavigate();
@@ -13,13 +14,83 @@ function SignupPartner() {
   const [formphno, setFormphno] = useState('');
   const [formemail,Setformemail]=useState('')
   const [itsuser,setItsuder]=useState('False')
+  function validatePhoneNumber(phoneNumber) {
+    console.log("haiii");
+    const phoneRegex = /^\d{10}$/;
 
+    return phoneRegex.test(phoneNumber);
+  }
+
+  function passwordvalidator(pass) {
+    console.log("hjhjhhh");
+
+    const uppercaseRegExp = /(?=.*?[A-Z])/;
+    const lowercaseRegExp = /(?=.*?[a-z])/;
+    const digitsRegExp = /(?=.*?[0-9])/;
+    const specialCharRegExp = /(?=.*?[#?!@$%^&*-])/;
+    const minLengthRegExp = /.{8,}/;
+    const passwordLength = pass.length;
+    const uppercasePassword = uppercaseRegExp.test(pass);
+    const lowercasePassword = lowercaseRegExp.test(pass);
+    const digitsPassword = digitsRegExp.test(pass);
+    const specialCharPassword = specialCharRegExp.test(pass);
+    const minLengthPassword = minLengthRegExp.test(pass);
+    let errMsg = "";
+    if (passwordLength === 0) {
+      Swal.fire({
+        title: "Auto close alert!",
+        text: "Password is empty.",
+        timer: 2000,
+      });
+    } else if (!uppercasePassword) {
+    
+      Swal.fire({
+        title: "Auto close alert!",
+        text: "At least one Uppercase",
+        timer: 2000,
+      });
+    } else if (!lowercasePassword) {
+      
+      Swal.fire({
+        title: "Auto close alert!",
+        text: "At least one Lowercase.",
+        timer: 2000,
+      });
+    } else if (!digitsPassword) {
+      
+      Swal.fire({
+        title: "Auto close alert!",
+        text: "At least one digit.",
+        timer: 2000,
+      });
+    } else if (!specialCharPassword) {
+     
+      Swal.fire({
+        title: "Auto close alert!",
+        text: "At least one Special Characters",
+        timer: 2000,
+      });
+    } else if (!minLengthPassword) {
+      Swal.fire({
+        title: "Auto close alert!",
+        text: "At least minumum 8 characters",
+        timer: 2000,
+      });
+    } else {
+    
+      return true
+      
+    }
+
+    
+  }
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === 'name') {
       setFormname(value);
     } else if (name === 'password1') {
+      
       setFormpassword1(value);
     } else if (name === 'password2') {
       setFormpassword2(value);
@@ -28,13 +99,24 @@ function SignupPartner() {
         Setformemail(value);
       }
       else if (name === 'number') {
-        setFormphno(value);
+        if (validatePhoneNumber(value)) {
+          // Phone number is valid
+          setFormphno(value);
+          console.log("Valid phone number:", formphno);
+        }
       }  
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    if (formpassword1){
+      if (passwordvalidator(formpassword1)) {
+
+      }
+      else{
+        return 
+      }
+    }
     if (formname.trim() === '') {
       return Swal.fire({
         title: 'Error',
@@ -96,7 +178,7 @@ function SignupPartner() {
    
     
 
-    let response = await fetch('http://127.0.0.1:8000/api/signup/otp/', {
+    let response = await fetch(`${baseUrl}api/signup/otp/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

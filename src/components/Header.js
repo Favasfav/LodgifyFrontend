@@ -17,7 +17,7 @@ function Header() {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+  console.log(user)
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);

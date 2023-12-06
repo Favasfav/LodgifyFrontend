@@ -29,7 +29,7 @@ import {
   ChevronDownIcon,
   CubeTransparentIcon,
 } from "@heroicons/react/24/outline";
-import { Icon } from "@material-ui/core";
+
 
 export function PartnerDashboard() {
   const { user } = useContext(AuthContext);

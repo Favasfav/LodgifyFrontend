@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { DatePicker, Space, InputNumber } from "antd";
+import { DatePicker } from "antd";
 import moment from "moment";
 import Axiosinstance from "../services/Axios";
 import { useLocation } from "react-router-dom";
@@ -142,7 +142,7 @@ Axiosinstance.post(`booking/blockproperty/${propertyId}/`,{
               your account, including but not limited to email or other
               electronic means.{" "}
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            {/* <div className="mt-10 flex items-center justify-center gap-x-6">
               <RangePicker
                 required
                 format="YYYY-MM-DD "
@@ -157,7 +157,25 @@ Axiosinstance.post(`booking/blockproperty/${propertyId}/`,{
                 Click Here To Proceed
               </button>
             </div>
-            
+             */}
+             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
           </div>
          
         </div>

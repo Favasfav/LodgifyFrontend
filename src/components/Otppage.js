@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useLocation } from 'react-router-dom';
 import Signup from './Signup';
+import { baseUrl } from '../constants';
+import Axiosinstance from '../services/Axios';
+
 function Otppage() {
   
   const [otp,setOtp]=useState('')
@@ -14,55 +17,80 @@ function Otppage() {
   
   
   const otpverification = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    
-    
+    e.preventDefault();
+  
+    if (otp === formData1.otp) {
+      console.log("yesotp");
+      console.log(formData1);
+  
       try {
-        if (otp === formData1.otp) {
-        
-        const response = await fetch(formData1.itsuser==='True'?'http://127.0.0.1:8000/api/signup/':'http://127.0.0.1:8000/api/Partnersignup/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData1),
-        });
+        const response = formData1.itsuser === 'True'
+          ? await Axiosinstance.post('api/signup/', formData1)
+          : await Axiosinstance.post('/api/Partnersignup/', formData1);
+  
+        console.log("data", response.data);
   
         if (response.status === 201) {
-          console.log("data",response)
+          console.log("data", response);
           Swal.fire({
-          
             title: 'Success',
             text: 'Account created successfully!',
             icon: 'success',
             confirmButtonText: 'OK',
           }).then(() => {
-             navigate('/')
+           navigate('/login');
+
           });
-         }
-        }
-        else(
-          Swal.fire({
-            title: 'Otp incorrect!',
-            text: 'I will close in 2 seconds.',
-            timer: 2000
-          })
-        
+        } else {
          
-          
-        )
-        
-   
+          console.error('Unexpected status code:', response.status);
+          Swal.fire({
+            title: 'Unexpected Error!',
+            text: 'Something went wrong. Please try again later.',
+            icon: 'error',
+          });
+        }
       } catch (error) {
-        Swal.fire({
-          title: 'Incorrect Error!',
-          text: 'I will close in 2 seconds.',
-          timer: 2000 
-        })
-        
-      
+        console.error('Error during API call:', error);
+  
+       
+        if (error.response) {
+          
+          console.error('Server responded with:', error.response.data);
+          Swal.fire({
+            title: 'Server Error!',
+            text: 'Something went wrong on the server side. Please try again later.',
+            icon: 'error',
+          });
+        } else if (error.request) {
+          
+          console.error('No response received:', error.request);
+          Swal.fire({
+            title: 'Network Error!',
+            text: 'Please check your internet connection and try again.',
+            icon: 'error',
+          });
+        } else {
+         
+          console.error('Request setup error:', error.message);
+          Swal.fire({
+            title: 'Unexpected Error!',
+            text: 'Something went wrong. Please try again later.',
+            icon: 'error',
+          });
+        }
+      }
+    } else {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Invalid OTP. Please enter the correct OTP.',
+        icon: 'error',
+        timer: 2000,
+      });
+      navigate('/Signup');
     }
   };
+  
   
   return (
     <div>

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import Axiosinstance from "../services/Axios";
+import { baseUrl } from "../constants";
 
 function Partnerroomsadd() {
   const navigate = useNavigate();
@@ -183,7 +184,7 @@ function Partnerroomsadd() {
     );
     console.log("formdata---------------------------------property_name---------",formData.get(""));
     
-    let response = await fetch(`http://127.0.0.1:8000/partner/Addproperty/`, {
+    let response = await fetch(`${baseUrl}partner/Addproperty/`, {
       method: "POST",
       body: formData, // Use the FormData object
       // headers: {
