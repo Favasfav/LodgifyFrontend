@@ -275,10 +275,14 @@ function Profileview() {
             <p className="pt-8 text-sm">
             "Unlock Unforgettable Stays with Lodgify: Your Gateway to Hassle-Free Reservations."
             </p>
-           
-              <div className="pt-12 pb-8">
+            <div className="pt-12 pb-8">
 
-    <Button  className="bg-green-700 hover:bg-green-900 text-white font-bold py-4 px-4 rounded-full" onClick={toggleOpen}>Open For See The wallet </Button>
+    <Button  className="bg-green-700 hover:bg-green-900 text-white font-bold py-4 px-4 rounded-full" onClick={()=>{navigate('/ProfileUpdateModel')}}>Edit Profile </Button>
+       
+  </div>
+              <div className="pt-4 pb-8">
+
+    <Button  className="bg-green-700 hover:bg-green-900 text-white font-bold  px-4 rounded-full" onClick={toggleOpen}>Open For See The wallet </Button>
        <Collapse open={open}>
         <Card className="my-4 mx-auto w-8/12">
           <CardBody>
