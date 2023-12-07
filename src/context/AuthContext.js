@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     let url;
   
     if (superuser === "True") {
-      url = `${baseUrl}api/adminlogin/`;
+      url = `https://lodgify.boxwatches.shop/api/adminlogin/`;
     } else {
       url =
         itspartner === "False"
