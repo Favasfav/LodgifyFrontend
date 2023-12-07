@@ -3,7 +3,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
 import Axiosinstance from '../../services/Axios';
-
+import moment from "moment";
 function preventDefault(event) {
   event.preventDefault();
 }
@@ -36,7 +36,7 @@ export default function Deposits() {
       Rs: {wallet}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 15 March, 2019
+      {moment().format("DD-MM-YYYY hh:mm:ss")} 
       </Typography>
       <div>
         {/* <Link color="primary" href="#" onClick={preventDefault}>
