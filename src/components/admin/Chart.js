@@ -1,104 +1,60 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
-import Title from './Title';
-import { useEffect ,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Axiosinstance from '../../services/Axios';
-
-
-// Generate Sales Data
-function createData(time, amount) {
-  return { time, amount };
-}
-
-const data = [
-  createData('00:00', 0),
-  createData('01-05', 300),
-  createData('05-10', 600),
-  createData('10-15', 800),
-  createData('15-20', 1500),
-  createData('25:31', 2000),
-  
-  createData('31', undefined),
-];
+import ReactApexChart from 'react-apexcharts';
 
 export default function Chart() {
-  const [booking,setbooking]=useState([])
-  useEffect(()=>{
-    const fetchbooking=async()=>{
+  const [orderstatus, setOrderstatus] = useState({});
+  const [confirmorder, setConfirmorder] = useState(0);
+  const [cancelorder, setCancelorder] = useState(0);
+  const [options, setOptions] = useState({
+    chart: {
+      width: 380,
+      type: 'pie',
+    },
+    labels: ['Confirmed Booking ', 'Cancelled Booking '],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            position: 'bottom',
+          },
+        },
+      },
+    ],
+  });
+
+  useEffect(() => {
+    const fetchBooking = async () => {
       try {
-await Axiosinstance.get("booking/salesreport").then((response)=>{
-setbooking(response.data)
-})
-
+        const response = await Axiosinstance.get('booking/salesreport/');
+        console.log("object saleslist", response.data);
+        setOrderstatus(response.data);
+        setCancelorder(response.data.cancelled_obj_count);
+        setConfirmorder(response.data.confirem_obj_count);
+      } catch (error) {
+        console.error('Error fetching booking data:', error);
       }
-      catch{
+    };
 
-      }
-    }
-fetchbooking()
+    fetchBooking();
+  }, []);
 
-  },[])
-  const theme = useTheme();
+  const series = [confirmorder, cancelorder];
 
   return (
-    <React.Fragment>
-      <Title>Monthy Booking</Title>
-      <ResponsiveContainer>
-        <LineChart
-          data={data}
-          margin={{
-            top: 16,
-            right: 16,
-            bottom: 0,
-            left: 24,
-          }}
-        >
-          <XAxis
-          
-            dataKey="time"
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          > 
-          <Label
-        
-              angle={360}
-              position="start"
-              style={{
-                padding:'3px',
-                textAnchor: 'middle',
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-            Date
-            </Label>
-          </XAxis>
-          <YAxis
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: 'middle',
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-              Sales ($)
-            </Label>
-          </YAxis>
-          <Line
-            isAnimationActive={false}
-            type="monotone"
-            dataKey="amount"
-            stroke={theme.palette.primary.main}
-            dot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </React.Fragment>
+    <div>
+      <p>Booking Status</p>
+      {orderstatus ? (
+        <div id="chart" className='mt-1'>
+          <ReactApexChart options={options} series={series} type="pie" width={350} />
+        </div>
+      ) : (
+        <p>No Booking</p>
+      )}
+    </div>
   );
 }

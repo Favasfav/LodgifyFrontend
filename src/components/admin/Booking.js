@@ -26,12 +26,12 @@ export default function Booking() {
   const {user}=React.useContext(AuthContext)
   useEffect(()=>{
     const fetchbooking=async()=>{
+      
       try {
-        const token = localStorage.getItem('authTokens');
-        const data={token:token}
-await Axiosinstance.get("booking/latestsale",data=data).then((response)=>{
+        
+await Axiosinstance.get("booking/latestsale").then((response)=>{
   setbookinglatest(response.data)
-  console.log("setbookinglatest",response.data)
+  
 })
 
       }
