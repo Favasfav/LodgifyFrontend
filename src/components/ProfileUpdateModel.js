@@ -1,139 +1,122 @@
+import React, { useEffect, useRef, useState, useContext } from "react";
 
-
-import React, { useEffect,useRef, useState,useContext } from 'react';
-
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import AuthContext from '../context/AuthContext';
-import { baseUrl } from '../constants';
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import AuthContext from "../context/AuthContext";
+import { baseUrl } from "../constants";
 function ProfileUpdateModel() {
   const navigate = useNavigate();
   // const [itsuser,setUser]=useState("True")
-  const [formname, setFormname] = useState('');
+  const [formname, setFormname] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
-  const [formphno, setFormphno] = useState('');
-  const [formprofile_photo,Setformprofile_photo]=useState('null')
-  
-  const {user}=useContext(AuthContext)
+  const [formphno, setFormphno] = useState("");
+  const [formprofile_photo, Setformprofile_photo] = useState("null");
+
+  const { user } = useContext(AuthContext);
   function validatePhoneNumber(phoneNumber) {
     console.log("haiii");
     const phoneRegex = /^\d{10}$/;
 
     return phoneRegex.test(phoneNumber);
   }
-  const handleChange = async(e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
-    console.log("value",value)
-    if (name === 'name') {
+    console.log("value", value);
+    if (name === "name") {
       setFormname(value);
-    
-    }
-    
-      else if (name === 'contact') {
-        if (validatePhoneNumber(value)) {
-          // Phone number is valid
-          setFormphno(value);
-          console.log("Valid phone number:", formphno);
-        }
+    } else if (name === "contact") {
+      if (validatePhoneNumber(value)) {
+        // Phone number is valid
+        setFormphno(value);
+        console.log("Valid phone number:", formphno);
       }
-      
-     
-      
+    }
+  };
+
+  const handleChangeimage = (e) => {
+    const file = e.target.files[0];
+    Setformprofile_photo(e.target.files[0]);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  // const file = inputFileRef.current.files[0];
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formname.trim() === "") {
+      return Swal.fire({
+        title: "Error",
+        text: "Enter username!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
 
-  
+    if (isNaN(formphno) || formphno.toString().trim() === "") {
+      return Swal.fire({
+        title: "Error",
+        text: "Enter a Mobile no!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+    console.log("object", formname, formphno);
 
-    
-    
-    
-      const handleChangeimage = (e) => {
-        const file = e.target.files[0];
-        Setformprofile_photo(e.target.files[0])
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            setImagePreview(e.target.result);
-          };
-          reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append("username", formname);
+    formData.append("phone_no", formphno);
+    formData.append("profile_photo", formprofile_photo);
+    console.log("formdat", formData.get("profile_photo"));
+    console.log("id", user.user_id);
+    try {
+      let response = await fetch(
+        `${baseUrl}api/profileupdate/${user.user_id}/`,
+        {
+          method: "POST",
+          body: formData,
         }
-      };
-    // const file = inputFileRef.current.files[0];
-      const handleSubmit = async (e) => {
-            e.preventDefault();
-            
-            if (formname.trim() === '') {
-              return Swal.fire({
-                title: 'Error',
-                text: 'Enter username!',
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-            }
-      
-        
-     
-        
-            if (isNaN(formphno) || formphno.toString().trim() === '') {
-              return Swal.fire({
-                title: 'Error',
-                text: 'Enter a Mobile no!',
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-            }
-            console.log("object",formname,formphno)
-          
-            
-            const formData = new FormData();
-            formData.append('username', formname);
-            formData.append('phone_no', formphno);
-            formData.append('profile_photo', formprofile_photo);
-        console.log("formdat",formData.get('profile_photo'))
-        console.log("id",user.user_id)
-  try{
-    let response = await fetch(`${baseUrl}api/profileupdate/${user.user_id}/`, {
-      method: 'POST',
-      body: formData, 
-    });
-        let data = await response.json();
-              console.log("hhhhhh",data)
-              if (response.status === 201) {
-               console.log("hhhhhh",data)
-              
-               Swal.fire({
-                title: 'Success',
-                text: 'Account created successfully!',
-                icon: 'success',
-                confirmButtonText: 'OK',
-              }).then(() => {
-                
-                console.log("updated user",user)
-                navigate('/');
-              });
-            } 
-            else if (data.username) {
-              Swal.fire({
-                title: 'Error',
-                text: data.username,
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-            } else {
-              alert('Something went wrong');
-            }
-  }  
-  catch(error){
-    console.log(error.message)
-  }
+      );
+      let data = await response.json();
+      console.log("hhhhhh", data);
+      if (response.status === 201) {
+        console.log("hhhhhh", data);
 
-       
-            
+        Swal.fire({
+          title: "Success",
+          text: "Account created successfully!",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          console.log("updated user", user);
+          navigate("/");
+        });
+      } else if (data.username) {
+        Swal.fire({
+          title: "Error",
+          text: data.username,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      } else {
+        alert("Something went wrong");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-3/4">
-        <form className="bg-white p-8 rounded-lg shadow-md"  onSubmit={handleSubmit}>
+        <form
+          className="bg-white p-8 rounded-lg shadow-md"
+          onSubmit={handleSubmit}
+        >
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Profile</h2>
 
           <div className="grid grid-cols-1 gap-6">
@@ -144,7 +127,8 @@ function ProfileUpdateModel() {
               >
                 Username
               </label>
-              <input onChange={handleChange}
+              <input
+                onChange={handleChange}
                 type="text"
                 name="name"
                 id="username"
@@ -161,7 +145,8 @@ function ProfileUpdateModel() {
               >
                 Contact No
               </label>
-              <input onChange={handleChange}
+              <input
+                onChange={handleChange}
                 type="text"
                 name="contact"
                 id="contact"
@@ -176,7 +161,7 @@ function ProfileUpdateModel() {
                 htmlFor="cover-photo"
                 className="block text-sm font-medium text-gray-900"
               >
-                 Photo
+                Photo
               </label>
               <div className="flex items-center mt-2">
                 <label
@@ -184,9 +169,9 @@ function ProfileUpdateModel() {
                   className="cursor-pointer rounded-md bg-white font-semibold text-indigo-600 px-4 py-2 border border-gray-300 hover:text-indigo-500 focus:ring focus:ring-indigo-600 focus:ring-offset-2"
                 >
                   Upload a file
-                  <input  onChange={handleChangeimage}
+                  <input
+                    onChange={handleChangeimage}
                     id="file-upload"
-                   
                     name="file"
                     type="file"
                     className="sr-only"
@@ -197,10 +182,14 @@ function ProfileUpdateModel() {
                 </p>
               </div>
               {imagePreview && (
-        <div className="mt-2">
-          <img src={imagePreview} alt="Preview" className="max-w-full max-h-52" />
-        </div>
-      )}
+                <div className="mt-2">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="max-w-full max-h-52"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
