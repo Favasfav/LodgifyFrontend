@@ -90,37 +90,42 @@ function ProfileUpdateModel() {
             formData.append('profile_photo', formprofile_photo);
         console.log("formdat",formData.get('profile_photo'))
         console.log("id",user.user_id)
-    
-let response = await fetch(`${baseUrl}api/profileupdate/${user.user_id}/`, {
-  method: 'POST',
-  body: formData, 
-});
-    let data = await response.json();
-          console.log("hhhhhh",data)
-          if (response.status === 201) {
-           console.log("hhhhhh",data)
-          
-           Swal.fire({
-            title: 'Success',
-            text: 'Account created successfully!',
-            icon: 'success',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            
-            console.log("updated user",user)
-            navigate('/');
-          });
-        } 
-        else if (data.username) {
-          Swal.fire({
-            title: 'Error',
-            text: data.username,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        } else {
-          alert('Something went wrong');
-        }
+  try{
+    let response = await fetch(`${baseUrl}api/profileupdate/${user.user_id}/`, {
+      method: 'POST',
+      body: formData, 
+    });
+        let data = await response.json();
+              console.log("hhhhhh",data)
+              if (response.status === 201) {
+               console.log("hhhhhh",data)
+              
+               Swal.fire({
+                title: 'Success',
+                text: 'Account created successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                
+                console.log("updated user",user)
+                navigate('/');
+              });
+            } 
+            else if (data.username) {
+              Swal.fire({
+                title: 'Error',
+                text: data.username,
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            } else {
+              alert('Something went wrong');
+            }
+  }  
+  catch(error){
+    console.log(error.message)
+  }
+
        
             
   };
