@@ -36,7 +36,7 @@ export default function Deposits() {
       Rs: {wallet}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-      {moment().format("DD-MM-YYYY hh:mm:ss")} 
+     Date: {moment().format("DD-MM-YYYY hh:mm:ss")} 
       </Typography>
       <div>
         {/* <Link color="primary" href="#" onClick={preventDefault}>
