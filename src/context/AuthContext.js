@@ -46,15 +46,15 @@ export const AuthProvider = ({ children }) => {
     let url;
   
     if (superuser === "True") {
-      url = `https://lodgify.boxwatches.shop/api/adminlogin/`;
+      url = `${baseUrl}api/adminlogin/`;
     } else {
       url =
         itspartner === "False"
           ? `${baseUrl}api/token/`
           : `${baseUrl}api/partnerlogin/`;
     }
-  
     
+ 
   
     try {
       const response = await axios.post(url, {
