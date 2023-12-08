@@ -289,6 +289,7 @@ import Chatlist from "./components/Chats/Chatlist";
 import Chatlistpartner from "./components/Chats/Chatlistpartner";
 import Propertyblock from "./partner/Propertyblock";
 import NotFound from "./Pages/NotFound";
+import Getpartnerbooking from "./partner/Getpartnerbooking";
 function PrivateRouteuser({ element }) {
   console.log("hi");
 
@@ -374,6 +375,7 @@ function App() {
           <Route path="/chatlist" element={<Chatlist />} />
           <Route path="/getchatlistpartner" element={<Chatlistpartner />} />
           <Route path="/getchatpartner" element={<Chatpartner />} />
+          <Route path="/partnerbooking" element={<Getpartnerbooking />} />
           <Route
             path="Detailedpropertiespartner/blockpropertypartner"
             element={<Propertyblock />}

@@ -30,7 +30,6 @@ import {
   CubeTransparentIcon,
 } from "@heroicons/react/24/outline";
 
-
 export function PartnerDashboard() {
   const { user } = useContext(AuthContext);
   const [open, setOpen] = React.useState(0);
@@ -52,67 +51,66 @@ export function PartnerDashboard() {
   const getproperties = (e) => {
     navigate("/partnerproperties", { state: partner });
   };
-  const [partnerrevenue,setPartnerrevenue]=useState(0)
-  const[bookinglatest,setBookinglatest]=useState([])
-  const [noofbooking,setnoofbooking]=useState(0)
-  const getnoofbooking=()=>{
-    try{
-Axiosinstance.get(`booking/gettotalnobooking/${user.user_id}`).then((response)=>{
-  
-  if(response){
-    setnoofbooking(response.data)
-    
-  }
-  else{
-    setnoofbooking(0)
-  }
+  const [partnerrevenue, setPartnerrevenue] = useState(0);
+  const [bookinglatest, setBookinglatest] = useState([]);
+  const [noofbooking, setnoofbooking] = useState(0);
+  const [mybooking, setmybooking] = useState([]);
  
-})
-    }
-    catch{
+
+  const getnoofbooking = () => {
+    try {
+      Axiosinstance.get(`booking/gettotalnobooking/${user.user_id}`).then(
+        (response) => {
+          if (response) {
+            setnoofbooking(response.data);
+          } else {
+            setnoofbooking(0);
+          }
+        }
+      );
+    } catch {
       console.error("Error fetching data:");
     }
-  }
+  };
 
-  console.log("object==noofbooking======",noofbooking)
-const fetchRevenue=()=>{ 
-  try {
-    Axiosinstance.get(`booking/get_revenue_amount/${user.user_id}/`)
-      .then((response) => {
-        if (response.data) {
-          console.log("Data:=====================", response.data);
-          setPartnerrevenue(response.data);
-        } else {
-          console.error("Error in response:", response);
+  console.log("object==noofbooking======", noofbooking);
+  const fetchRevenue = () => {
+    try {
+      Axiosinstance.get(`booking/get_revenue_amount/${user.user_id}/`)
+        .then((response) => {
+          if (response.data) {
+            console.log("Data:=====================", response.data);
+            setPartnerrevenue(response.data);
+          } else {
+            console.error("Error in response:", response);
+          }
+        })
+        .catch((error) => {
+          console.error("API request failed with error:", error);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // setLoading(false);
+    }
+  };
+
+  console.log(partnerrevenue, "partbndheh");
+  const latestbooking = () => {
+    try {
+      Axiosinstance.get(`booking/bookinglatest/${user.user_id}`).then(
+        (response) => {
+          if (response.data) {
+            console.log("Data:=====================", response.data);
+            setBookinglatest(response.data);
+          } else {
+            console.error("Error in response:", response);
+          }
         }
-      })
-      .catch((error) => {
-        console.error("API request failed with error:", error);
-      });
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    // setLoading(false);
-  }
-
-}
-
-console.log(partnerrevenue,"partbndheh")
-const latestbooking=()=>{
-  try{
-Axiosinstance.get(`booking/bookinglatest/${user.user_id}`).then((response)=>{
-  if (response.data) {
-  console.log("Data:=====================", response.data);
-  setBookinglatest(response.data);
-}
- else {
-  console.error("Error in response:", response);
-}})
-  
-  }
-  catch{
-console.log("error")
-  }
-}
+      );
+    } catch {
+      console.log("error");
+    }
+  };
 
   useEffect(() => {
     const fetchpropertyList = async () => {
@@ -352,6 +350,28 @@ console.log("error")
                     </li>
                     <li>
                       <a
+                        onClick={() => navigate("/partnerbooking")}
+                        className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
+                      >
+                        <svg
+                          className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="ml-3 flex-1 whitespace-nowrap">
+                          My Booking
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
                         onClick={logoutUser}
                         className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                       >
@@ -375,7 +395,7 @@ console.log("error")
                     <li>
                       <a
                         onClick={() => {
-                          navigate("/getchatlistpartner");
+                          navigate("/getparnerbooking");
                         }}
                         target="_blank"
                         className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2"
@@ -397,7 +417,6 @@ console.log("error")
                       </a>
                     </li>
                   </ul>
-             
                 </div>
               </div>
             </div>
@@ -420,13 +439,12 @@ console.log("error")
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex-shrink-0">
                         <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                         Rs: {partnerrevenue}
+                          Rs: {partnerrevenue}
                         </span>
                         <h3 className="text-base font-normal text-gray-500">
-                         Totel Revenue
+                          Totel Revenue
                         </h3>
                       </div>
-                    
                     </div>
                     <div id="main-chart" />
                   </div>
@@ -474,23 +492,23 @@ console.log("error")
                                 </tr>
                               </thead>
                               <tbody className="bg-white">
-                              {bookinglatest.map((booking)=>(    <tr>
-                                 
-                                 <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                   Payment from : 
-                                   <span className="font-semibold">
-                                   {booking.user.user.username}
-                                   </span>
-                                 </td>
-                                 <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                  {booking.check_in_date}--{booking.check_out_date}
-                                 </td>
-                                 <td className="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                   {0.7*booking.total_amount}
-                                 </td>
-                               </tr>))}
-                            
-                                
+                                {bookinglatest.map((booking) => (
+                                  <tr>
+                                    <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
+                                      Payment from :
+                                      <span className="font-semibold">
+                                        {booking.user.user.username}
+                                      </span>
+                                    </td>
+                                    <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
+                                      {booking.check_in_date}--
+                                      {booking.check_out_date}
+                                    </td>
+                                    <td className="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                      {0.7 * booking.total_amount}
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
                           </div>
@@ -510,7 +528,6 @@ console.log("error")
                           Total Booking
                         </h3>
                       </div>
-                     
                     </div>
                   </div>
                   <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
@@ -568,7 +585,7 @@ console.log("error")
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
+                {/* <div className="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
                   <div className="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-xl font-bold leading-none text-gray-900">
@@ -883,7 +900,7 @@ console.log("error")
                       </table>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </main>
             <footer className="bg-white md:flex md:items-center md:justify-between shadow rounded-lg p-4 md:p-6 xl:p-8 my-6 mx-4">
@@ -994,8 +1011,6 @@ console.log("error")
         </div>
       </div>
     </>
-
-
   );
 }
 
