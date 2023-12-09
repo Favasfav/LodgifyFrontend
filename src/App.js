@@ -95,7 +95,7 @@ function App() {
           <Route path="/bookingpage" element={<Userprivet><BookingPage /></Userprivet>} />
           <Route path="/profileviwe"element={<Loginedprivet ><Profileview /></Loginedprivet>} />
           <Route path="/Partnerdashboard" element= {<Partnerprivet><Partnerdashboard /></Partnerprivet>}/>
-          <Route path="/admindashbord" element={<Adminprivet><Admindashboard /></Adminprivet>} />
+          <Route path="/admindashbord" element={<Adminprivet><Admindashboard  /></Adminprivet>}/>
           <Route path="/userlist" element={<Adminprivet><Userlist /></Adminprivet>} />
           <Route path="/ProfileUpdateModel" element={<Loginedprivet><ProfileUpdateModel /></Loginedprivet>} />
           <Route path="/partnerroomsadd" element={<Partnerprivet><Partnerroomsadd /></Partnerprivet>} />

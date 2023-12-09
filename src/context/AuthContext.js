@@ -76,11 +76,12 @@ export const AuthProvider = ({ children }) => {
         setUser(jwt_decode(response.data.access));
   
         localStorage.setItem("authTokens", JSON.stringify(response.data));
-  
+        console.log("decodedToken.role",decodedToken.role)
         if (itspartner === "True") {
           navigate("/Partnerdashboard");
         } else if (decodedToken.role==='admin') {
-          console.log("heretonavigate");
+          console.log("heretonavigateadmin");
+          
           navigate("/admindashbord");
         } else {
           navigate("/");

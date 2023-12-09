@@ -5,11 +5,13 @@ import { Navigate } from 'react-router-dom'
 function Loginedprivet(props) {
     const {user}=useContext(AuthContext)
   if (user){
-        return <Navigate to='/login'/>
-  }
-  else{
     return props.children
+  } 
+  else{
+   
+    return <Navigate to='/login'/>
   }
-}
+  }
+
 
 export default Loginedprivet

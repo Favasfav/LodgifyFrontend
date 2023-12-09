@@ -137,7 +137,7 @@ export function PartnerDashboard() {
     fetchRevenue();
     latestbooking();
     getnoofbooking();
-  }, []);
+  }, [partnerrevenue]);
   return (
     <>
       {/* component */}

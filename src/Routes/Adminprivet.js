@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 // import { Navigate } from 'react-router-dom'
 function Adminprivet(props) {
     const {user}=useContext(AuthContext) 
-  if (user&& user.role==='Admin'){
+  if (user&& user.role==='admin'){
     return props.children
   }
   else{
