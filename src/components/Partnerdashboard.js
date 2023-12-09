@@ -59,7 +59,7 @@ export function PartnerDashboard() {
 
   const getnoofbooking = () => {
     try {
-      Axiosinstance.get(`booking/gettotalnobooking/${user.user_id}`).then(
+      Axiosinstance.get(`booking/gettotalnobookingpartner/${user.user_id}`).then(
         (response) => {
           if (response) {
             setnoofbooking(response.data);
@@ -97,7 +97,7 @@ export function PartnerDashboard() {
   console.log(partnerrevenue, "partbndheh");
   const latestbooking = () => {
     try {
-      Axiosinstance.get(`booking/bookinglatest/${user.user_id}`).then(
+      Axiosinstance.get(`booking/partnerbookinglatest/${user.user_id}`).then(
         (response) => {
           if (response.data) {
             console.log("Data:=====================", response.data);
@@ -492,7 +492,7 @@ export function PartnerDashboard() {
                                 </tr>
                               </thead>
                               <tbody className="bg-white">
-                                {bookinglatest.map((booking) => (
+                                {bookinglatest !==0 ?bookinglatest.map((booking) => (
                                   <tr>
                                     <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                       Payment from :
@@ -508,7 +508,7 @@ export function PartnerDashboard() {
                                       {0.7 * booking.total_amount}
                                     </td>
                                   </tr>
-                                ))}
+                                )):<p>No Booking...</p>}
                               </tbody>
                             </table>
                           </div>

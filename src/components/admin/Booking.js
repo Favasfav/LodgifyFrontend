@@ -29,7 +29,7 @@ export default function Booking() {
       
       try {
         
-await Axiosinstance.get("booking/latestsale").then((response)=>{
+await Axiosinstance.get("booking/latestsaleadmin").then((response)=>{
   setbookinglatest(response.data)
   
 })
