@@ -12,7 +12,7 @@ function Home() {
   const [maplocation, setmaplocation] = useState("");
   const handleLocationSelect = (selectedLocation) => {
     // Do something with the selected location data, e.g., set it in the component's state
-    console.log("Selected location in parent:", selectedLocation.place_name);
+    console.log("Selected location in parent:", selectedLocation);
     setmaplocation(selectedLocation.place_name);
   };
   const [fromdate, setfromdate] = useState("");

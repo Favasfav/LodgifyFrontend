@@ -104,6 +104,7 @@ function LocationProperty() {
         }
       });
     } else if (filterId === "Property_Type") {
+      
       setpropertytype((propertytype) => {
         if (propertytype.includes(value)) {
           return propertytype.filter((item) => item !== value);
@@ -149,7 +150,8 @@ function LocationProperty() {
     }
 
     if (propertytype.length > 0) {
-      queryParams.push(`Property_Type=${propertytype.join(",")}`);
+      // queryParams.push(`Property_Type=${propertytype.join(",")}`);
+      propertytype.forEach((cat) => queryParams.push(`Property_Type=${cat}`));
     }
 
     // Check if there are query parameters to append

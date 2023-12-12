@@ -197,6 +197,7 @@ return days+1
   const amt = (roomqty * property.single_room_price * 100*no_of_days());
   console.log("amt", amt);
   const razorpayPayment = () => {
+    console.log("inputs",roomqty,checkoutdate,checkindate,propertyId,user.user_id)
     Axiosinstance.post(
       `apirazorpay/order/create/${propertyId}/${checkindate}/${checkoutdate}/${roomqty}/${user.user_id}`,
       {
