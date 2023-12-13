@@ -53,7 +53,7 @@ export default function Chat() {
     console.log('user.id0-0-0-0');
    
    
-    const socket = new w3cwebsocket(`ws://${chatUrl}/ws/chat/${otherUserId}/?${currentUserId}`);
+    const socket = new w3cwebsocket(`wss://${chatUrl}/ws/chat/${otherUserId}/?${currentUserId}`);
     socket.onopen = () => {
       console.log('WebSocket connection opened');
     };
