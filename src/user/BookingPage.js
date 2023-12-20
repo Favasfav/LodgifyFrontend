@@ -210,7 +210,7 @@ return days+1
         const order_id = response.data.data.id;
 
         const options = {
-          key: "rzp_test_GlidMFhzhQAugp", // Enter the Key ID generated from the Dashboard
+          key: "rzp_test_5xVEgUg2MnBlyx", // Enter the Key ID generated from the Dashboard
           amount: amt, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
           currency: "INR",
           name: "Acme Corp",
