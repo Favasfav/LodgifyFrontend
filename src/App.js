@@ -89,7 +89,6 @@ function App() {
           <Route path="/signup" element={<Userpublic><Signup /></Userpublic>} />
           <Route path="/SignupPartner" element={<Userpublic><SignupPartner /></Userpublic>} />
           <Route path="/otppage" element={<Userpublic><Otppage /></Userpublic>} />
-         
           <Route path="/" element={<Home />} />
           <Route path="/Adminlogin" element={<Userpublic><Adminlogin /></Userpublic>} />
           <Route path="/bookingpage" element={<Userprivet><BookingPage /></Userprivet>} />

@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { baseUrl } from "../constants";
 const AuthContext = createContext();
 
-export default AuthContext;
+export default AuthContext; 
 
 export const AuthProvider = ({ children }) => {
   const[userdetails,setUserdetails]=useState()
