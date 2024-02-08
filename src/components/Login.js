@@ -98,6 +98,9 @@ function Login() {
                   <Link to="/Signup">Sign Up Here</Link>
                 )}
               </p>
+              <p className=" p-10 text-center">Demo Email and Password</p>
+              <p className="text-center">Email:demo@gmail.com\Password:Demo@123</p>
+
             </div>
           </div>
         </div>
