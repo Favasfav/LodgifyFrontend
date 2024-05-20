@@ -94,6 +94,16 @@ function Home() {
 
     window.scrollTo(0, 0)
   }, []);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("hhhhhhhhhhh")
+    navigate('/searchedproperty', {
+      state: {
+        searchedproperty: searched,
+        searched: searched,
+      },
+    });
+  }
   const searchedproperty = useMemo(() => {
     return properties.filter((property) =>
       property.property_name.toLowerCase().includes(searched.toLowerCase())
@@ -103,6 +113,8 @@ function Home() {
   console.log("searched", searchedproperty);
   console.log("todatefromdate----------", todate, fromdate);
   console.log("setUserdetails",userdetails)
+
+
   return (
     <div>
       <>
@@ -136,17 +148,12 @@ function Home() {
             </p>
             <div className=" flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
               <form
-                onSubmit={(e) =>
-                  navigate("/searchedproperty", {
-                    state: {
-                      searchedproperty: searchedproperty,
-                      searched: searched,
-                    },
-                  })
+                onSubmit={
+                  handleSubmit
                 }
               >
                 <button className=" p-10 inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
-                  Search
+                  Search property
                   <svg
                     className="w-3.5 h-3.5 ml-2"
                     aria-hidden="true"

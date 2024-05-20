@@ -40,7 +40,7 @@ export default function Chat() {
     const response=await Axiosinstance.get(`chats/previous_message/${currentUserId}/${otherUserId}`)
     if (response.status===200){
       setpreviousmessage(response.data)
-      
+     
     }
     else{
       console.log("eerror===============")
@@ -54,6 +54,7 @@ export default function Chat() {
    
    
     const socket = new w3cwebsocket(`wss://${chatUrl}/ws/chat/${otherUserId}/?${currentUserId}`);
+    console.log("objectlll")
     socket.onopen = () => {
       console.log('WebSocket connection opened');
     };
@@ -78,7 +79,7 @@ export default function Chat() {
 
   const sendMessage = () => {
     let messageReceiver = partner ? otherUserId : receiver;
-  
+  console.log("hhhhhhh")
     const message = {
       sender: user.user_id,
       receiver: messageReceiver,

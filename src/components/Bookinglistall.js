@@ -15,11 +15,11 @@ export default function Bookinglistall() {
     useEffect(() => {
         const fetchUserList = async () => {
           try {
+
+            
             const response =await Axiosinstance.get(`booking/bookinglistall/`);
             console.log("response.data",response.data)
             setBookinglist(response.data);
-            
-            
     
           } catch (error) {
             console.error('Error fetching data:', error);
@@ -35,6 +35,11 @@ export default function Bookinglistall() {
     
       
 const cancelorder=async(booking_id)=>{
+  const updatedBookings = bookinglist.map((booking) => {
+    if (booking.id === booking_id) {
+      return { ...booking, is_cancelled: true };    }
+    return booking;
+  });
     console.log(booking_id)
     const data={
         "booking_id":booking_id
@@ -42,6 +47,7 @@ const cancelorder=async(booking_id)=>{
     };
     await Axiosinstance.post('booking/cancelbooking/',data).then(function(response){
         console.log(response.data)
+        setBookinglist(updatedBookings)
     }
     )
 }

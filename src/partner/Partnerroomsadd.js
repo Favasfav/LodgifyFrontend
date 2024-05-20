@@ -182,7 +182,7 @@ function Partnerroomsadd() {
       "SELECTED AMENITY",
       selectedAmenity
     );
-    console.log("formdata---------------------------------property_name---------",formData.get(""));
+    console.log("formdata---------------------------------property_names---------",formData.get("photos"));
     
     let response = await fetch(`${baseUrl}partner/Addproperty/`, {
       method: "POST",
